@@ -1,0 +1,30 @@
+# Unity
+Library/
+Temp/
+Obj/
+Build/
+Builds/
+Logs/
+
+# User-specific settings
+UserSettings/
+
+# Visual Studio / Rider
+.vs/
+*.csproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+
+# VS Code
+.vscode/
+
+# Misc
+*.tmp
+*.log
+*.pdb
+
