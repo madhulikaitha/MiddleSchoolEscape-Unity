@@ -28,3 +28,8 @@ UserSettings/
 *.log
 *.pdb
 
+# OS / local tooling
+.DS_Store
+**/.DS_Store
+.claude/
+

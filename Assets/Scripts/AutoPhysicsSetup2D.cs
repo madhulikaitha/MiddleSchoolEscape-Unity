@@ -1,26 +1,77 @@
 using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public static class AutoPhysicsSetup2D
 {
-    private const string BoundsRootName = "__LevelBounds2D";
-    private const float BoundsPadding = 0.5f;
-    private const float BoundsThickness = 1.0f;
-
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void SetupScenePhysics()
     {
         try
         {
             EnsureEnvironmentColliders();
+            EnsureMazeColliders();
             EnsurePlayerPhysics();
-            EnsureCameraBounds();
         }
         catch (Exception ex)
         {
             Debug.LogError($"AutoPhysicsSetup2D failed: {ex.Message}");
         }
+    }
+
+    public static void EnsurePlayerPhysicsNow()
+    {
+        EnsurePlayerPhysics();
+    }
+
+    private static void EnsureMazeColliders()
+    {
+        var renderers = UnityEngine.Object.FindObjectsByType<SpriteRenderer>(FindObjectsSortMode.None);
+
+        // When both exist, use Maze-H for pixel colliders so walls match that sprite (Tiles-H is often a separate/legacy floor layer).
+        bool mazeHActive = false;
+        foreach (var sr in renderers)
+        {
+            if (sr == null || sr.gameObject == null) continue;
+            if (!sr.gameObject.scene.IsValid()) continue;
+            if (!sr.gameObject.activeInHierarchy) continue;
+            if (sr.gameObject.name.Equals("Maze-H", StringComparison.OrdinalIgnoreCase))
+            {
+                mazeHActive = true;
+                break;
+            }
+        }
+
+        foreach (var sr in renderers)
+        {
+            if (sr == null || sr.gameObject == null) continue;
+            if (!sr.gameObject.scene.IsValid()) continue;
+
+            var name = sr.gameObject.name;
+            if (!IsMazeColliderTarget(name, mazeHActive)) continue;
+
+            if (sr.gameObject.GetComponent<MazeColliderGenerator>() == null)
+            {
+                sr.gameObject.AddComponent<MazeColliderGenerator>();
+                Debug.Log($"AutoPhysicsSetup2D: Attached MazeColliderGenerator to '{name}'");
+            }
+        }
+
+        if (mazeHActive)
+        {
+            Debug.Log("AutoPhysicsSetup2D: Maze colliders follow active Maze-H (Tiles-H skipped to avoid duplicate walls).");
+        }
+    }
+
+    /// <summary>
+    /// Pixel-maze colliders attach only to Maze-H or Tiles-H — not other tile layers (avoids grout-line cages).
+    /// </summary>
+    private static bool IsMazeColliderTarget(string objectName, bool mazeHActiveInScene)
+    {
+        if (objectName.Equals("Maze-H", StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (objectName.Equals("Tiles-H", StringComparison.OrdinalIgnoreCase))
+            return !mazeHActiveInScene;
+        return false;
     }
 
     private static void EnsureEnvironmentColliders()
@@ -39,40 +90,56 @@ public static class AutoPhysicsSetup2D
             }
 
             var objectName = spriteRenderer.gameObject.name;
-            if (!LooksLikeEnvironment(objectName))
-            {
-                continue;
-            }
 
-            if (NeedsPolygonCollider(objectName))
+            // Wall-* sprites are decorative; WallBoundary.cs creates the actual room colliders.
+            // Adding BoxCollider2D to a wall sprite covers its entire bounding box, which
+            // can contain the player spawn point and block movement.
+            if (IsTableOrObstacle(objectName))
             {
-                if (spriteRenderer.GetComponent<PolygonCollider2D>() == null)
-                {
-                    spriteRenderer.gameObject.AddComponent<PolygonCollider2D>();
-                }
+                SetupObstacleCollider(spriteRenderer.gameObject);
             }
-            else
-            {
-                if (spriteRenderer.GetComponent<BoxCollider2D>() == null)
-                {
-                    spriteRenderer.gameObject.AddComponent<BoxCollider2D>();
-                }
-            }
-
-            var rb = spriteRenderer.GetComponent<Rigidbody2D>();
-            if (rb == null)
-            {
-                rb = spriteRenderer.gameObject.AddComponent<Rigidbody2D>();
-            }
-
-            rb.bodyType = RigidbodyType2D.Static;
-            rb.gravityScale = 0f;
         }
+    }
+
+    private static void SetupObstacleCollider(GameObject obj)
+    {
+        if (obj.GetComponent<Collider2D>() == null)
+        {
+            var box = obj.AddComponent<BoxCollider2D>();
+            box.isTrigger = false;
+            Debug.Log($"AutoPhysicsSetup2D: Added BoxCollider2D to obstacle '{obj.name}'");
+        }
+
+        var rb = obj.GetComponent<Rigidbody2D>();
+        if (rb == null)
+        {
+            rb = obj.AddComponent<Rigidbody2D>();
+        }
+        rb.bodyType = RigidbodyType2D.Static;
+        rb.gravityScale = 0f;
+    }
+
+    private static bool IsTableOrObstacle(string objectName)
+    {
+        return objectName.StartsWith("Table", StringComparison.OrdinalIgnoreCase)
+            || objectName.StartsWith("Counter", StringComparison.OrdinalIgnoreCase)
+            || objectName.IndexOf("obstacle", StringComparison.OrdinalIgnoreCase) >= 0
+            || objectName.IndexOf("bench", StringComparison.OrdinalIgnoreCase) >= 0
+            || objectName.IndexOf("locker", StringComparison.OrdinalIgnoreCase) >= 0;
     }
 
     private static void EnsurePlayerPhysics()
     {
-        var player = GameObject.FindGameObjectWithTag("Player");
+        GameObject player = null;
+        try
+        {
+            player = GameObject.FindGameObjectWithTag("Player");
+        }
+        catch (UnityException)
+        {
+            // Tag not defined — use name search below.
+        }
+
         if (player == null)
         {
             var allTransforms = UnityEngine.Object.FindObjectsByType<Transform>(FindObjectsSortMode.None);
@@ -99,8 +166,10 @@ public static class AutoPhysicsSetup2D
         }
 
         rb.bodyType = RigidbodyType2D.Dynamic;
-        rb.gravityScale = 3f;
-        rb.freezeRotation = true;
+        rb.gravityScale = 0f;
+        rb.linearDamping = 0f;
+        rb.angularDamping = 0f;
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         rb.interpolation = RigidbodyInterpolation2D.Interpolate;
 
@@ -108,81 +177,6 @@ public static class AutoPhysicsSetup2D
         {
             player.AddComponent<CapsuleCollider2D>();
         }
-    }
-
-    private static void EnsureCameraBounds()
-    {
-        var cam = Camera.main;
-        if (cam == null || !cam.orthographic)
-        {
-            return;
-        }
-
-        var scene = SceneManager.GetActiveScene();
-        var boundsRoot = GameObject.Find(BoundsRootName);
-        if (boundsRoot == null)
-        {
-            boundsRoot = new GameObject(BoundsRootName);
-            SceneManager.MoveGameObjectToScene(boundsRoot, scene);
-        }
-
-        var rb = boundsRoot.GetComponent<Rigidbody2D>();
-        if (rb == null)
-        {
-            rb = boundsRoot.AddComponent<Rigidbody2D>();
-        }
-
-        rb.bodyType = RigidbodyType2D.Static;
-        rb.gravityScale = 0f;
-
-        var halfHeight = cam.orthographicSize + BoundsPadding;
-        var halfWidth = cam.orthographicSize * cam.aspect + BoundsPadding;
-        var center = cam.transform.position;
-        var z = 0f;
-
-        CreateOrUpdateBound(boundsRoot, "Top", new Vector2(center.x, center.y + halfHeight), new Vector2(halfWidth * 2f, BoundsThickness), z);
-        CreateOrUpdateBound(boundsRoot, "Bottom", new Vector2(center.x, center.y - halfHeight), new Vector2(halfWidth * 2f, BoundsThickness), z);
-        CreateOrUpdateBound(boundsRoot, "Left", new Vector2(center.x - halfWidth, center.y), new Vector2(BoundsThickness, halfHeight * 2f), z);
-        CreateOrUpdateBound(boundsRoot, "Right", new Vector2(center.x + halfWidth, center.y), new Vector2(BoundsThickness, halfHeight * 2f), z);
-    }
-
-    private static void CreateOrUpdateBound(GameObject root, string name, Vector2 worldPosition, Vector2 size, float z)
-    {
-        var child = root.transform.Find(name);
-        if (child == null)
-        {
-            var go = new GameObject(name);
-            child = go.transform;
-            child.SetParent(root.transform);
-        }
-
-        child.position = new Vector3(worldPosition.x, worldPosition.y, z);
-        child.localRotation = Quaternion.identity;
-        child.localScale = Vector3.one;
-
-        var collider = child.GetComponent<BoxCollider2D>();
-        if (collider == null)
-        {
-            collider = child.gameObject.AddComponent<BoxCollider2D>();
-        }
-
-        collider.size = size;
-        collider.isTrigger = false;
-    }
-
-    private static bool LooksLikeEnvironment(string objectName)
-    {
-        return objectName.StartsWith("Wall", StringComparison.OrdinalIgnoreCase)
-            || objectName.StartsWith("Tiles", StringComparison.OrdinalIgnoreCase)
-            || objectName.StartsWith("Base", StringComparison.OrdinalIgnoreCase)
-            || objectName.IndexOf("maze", StringComparison.OrdinalIgnoreCase) >= 0
-            || objectName.IndexOf("chatgpt image", StringComparison.OrdinalIgnoreCase) >= 0;
-    }
-
-    private static bool NeedsPolygonCollider(string objectName)
-    {
-        return objectName.IndexOf("maze", StringComparison.OrdinalIgnoreCase) >= 0
-            || objectName.IndexOf("chatgpt image", StringComparison.OrdinalIgnoreCase) >= 0;
     }
 }
 
