@@ -418,6 +418,8 @@ GameObject:
   - component: {fileID: 39729319}
   - component: {fileID: 39729318}
   - component: {fileID: 39729317}
+
+  - component: {fileID: 920010001}
   m_Layer: 0
   m_Name: 2Explodingtile-SL (08)
   m_TagString: Untagged
@@ -1386,6 +1388,8 @@ GameObject:
   - component: {fileID: 340567136}
   - component: {fileID: 340567135}
   - component: {fileID: 340567134}
+
+  - component: {fileID: 920010002}
   m_Layer: 0
   m_Name: 2Explodingtile-SL (11)
   m_TagString: Untagged
@@ -1500,6 +1504,8 @@ GameObject:
   - component: {fileID: 371462539}
   - component: {fileID: 371462538}
   - component: {fileID: 371462537}
+
+  - component: {fileID: 920010003}
   m_Layer: 0
   m_Name: 2Explodingtile-SL (1)
   m_TagString: Untagged
@@ -3085,6 +3091,8 @@ GameObject:
   - component: {fileID: 680079855}
   - component: {fileID: 680079854}
   - component: {fileID: 680079853}
+
+  - component: {fileID: 920010004}
   m_Layer: 0
   m_Name: 2Explodingtile-SL (14)
   m_TagString: Untagged
@@ -3636,6 +3644,8 @@ GameObject:
   - component: {fileID: 822569719}
   - component: {fileID: 822569718}
   - component: {fileID: 822569717}
+
+  - component: {fileID: 920010005}
   m_Layer: 0
   m_Name: 2Explodingtile-SL (09)
   m_TagString: Untagged
@@ -4887,6 +4897,8 @@ GameObject:
   - component: {fileID: 998807476}
   - component: {fileID: 998807475}
   - component: {fileID: 998807474}
+
+  - component: {fileID: 920010006}
   m_Layer: 0
   m_Name: 2Explodingtile-SL (6)
   m_TagString: Untagged
@@ -5592,6 +5604,8 @@ GameObject:
   - component: {fileID: 1126584477}
   - component: {fileID: 1126584476}
   - component: {fileID: 1126584475}
+
+  - component: {fileID: 920010007}
   m_Layer: 0
   m_Name: 2Explodingtile-SL (10)
   m_TagString: Untagged
@@ -5919,6 +5933,8 @@ GameObject:
   - component: {fileID: 1176236535}
   - component: {fileID: 1176236534}
   - component: {fileID: 1176236533}
+
+  - component: {fileID: 920010008}
   m_Layer: 0
   m_Name: 2Explodingtile-SL (4)
   m_TagString: Untagged
@@ -7140,6 +7156,8 @@ GameObject:
   - component: {fileID: 1408919244}
   - component: {fileID: 1408919243}
   - component: {fileID: 1408919242}
+
+  - component: {fileID: 920010009}
   m_Layer: 0
   m_Name: 2Explodingtile-SL (2)
   m_TagString: Untagged
@@ -7528,6 +7546,8 @@ GameObject:
   - component: {fileID: 1484264523}
   - component: {fileID: 1484264522}
   - component: {fileID: 1484264521}
+
+  - component: {fileID: 920010010}
   m_Layer: 0
   m_Name: 2Explodingtile-SL (13)
   m_TagString: Untagged
@@ -8338,6 +8358,8 @@ GameObject:
   - component: {fileID: 1576308651}
   - component: {fileID: 1576308650}
   - component: {fileID: 1576308649}
+
+  - component: {fileID: 920010011}
   m_Layer: 0
   m_Name: 2Explodingtile-SL (7)
   m_TagString: Untagged
@@ -9634,6 +9656,8 @@ GameObject:
   - component: {fileID: 1768470251}
   - component: {fileID: 1768470250}
   - component: {fileID: 1768470249}
+
+  - component: {fileID: 920010012}
   m_Layer: 0
   m_Name: 2Explodingtile-SL (5)
   m_TagString: Untagged
@@ -10218,6 +10242,8 @@ GameObject:
   - component: {fileID: 1838671023}
   - component: {fileID: 1838671022}
   - component: {fileID: 1838671021}
+
+  - component: {fileID: 920010013}
   m_Layer: 0
   m_Name: 2Explodingtile-SL (3)
   m_TagString: Untagged
@@ -10833,6 +10859,8 @@ GameObject:
   - component: {fileID: 1933635363}
   - component: {fileID: 1933635362}
   - component: {fileID: 1933635361}
+
+  - component: {fileID: 920010014}
   m_Layer: 0
   m_Name: 2Explodingtile-SL (12)
   m_TagString: Untagged
@@ -11129,6 +11157,8 @@ GameObject:
   - component: {fileID: 1974205784}
   - component: {fileID: 1974205783}
   - component: {fileID: 1974205782}
+
+  - component: {fileID: 920010015}
   m_Layer: 0
   m_Name: 2Explodingtile-SL
   m_TagString: Untagged
@@ -12056,3 +12086,333 @@ SceneRoots:
   - {fileID: 1284894088}
   - {fileID: 371462539}
   - {fileID: 1838671023}
+--- !u!114 &920010001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 39729316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c6d7c61b674a494d90878e4f0cedd90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionRadius: 2
+  holeRadius: 0.6
+  crackAnimDuration: 1.1
+  phaseSprites: []
+  holeSprite: {fileID: 3807138539493061304, guid: c8f1eaa5b8660624ca4705802783ca7d, type: 3}
+  holeTileObject: {fileID: 0}
+  hideExplodingTileWhenOpen: 1
+  crackAnimatorStateName: explodingtilesl
+  crackLeadSound: {fileID: 8300000, guid: 90730171a8aea624faaefb77aa109ebe, type: 3}
+  crackHitSound: {fileID: 8300000, guid: f9d367227dc382f47a8e4dcfec835d2e, type: 3}
+--- !u!114 &920010002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 340567133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c6d7c61b674a494d90878e4f0cedd90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionRadius: 2
+  holeRadius: 0.6
+  crackAnimDuration: 1.1
+  phaseSprites: []
+  holeSprite: {fileID: 3807138539493061304, guid: c8f1eaa5b8660624ca4705802783ca7d, type: 3}
+  holeTileObject: {fileID: 0}
+  hideExplodingTileWhenOpen: 1
+  crackAnimatorStateName: explodingtilesl
+  crackLeadSound: {fileID: 8300000, guid: 90730171a8aea624faaefb77aa109ebe, type: 3}
+  crackHitSound: {fileID: 8300000, guid: f9d367227dc382f47a8e4dcfec835d2e, type: 3}
+--- !u!114 &920010003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 371462536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c6d7c61b674a494d90878e4f0cedd90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionRadius: 2
+  holeRadius: 0.6
+  crackAnimDuration: 1.1
+  phaseSprites: []
+  holeSprite: {fileID: 3807138539493061304, guid: c8f1eaa5b8660624ca4705802783ca7d, type: 3}
+  holeTileObject: {fileID: 0}
+  hideExplodingTileWhenOpen: 1
+  crackAnimatorStateName: explodingtilesl
+  crackLeadSound: {fileID: 8300000, guid: 90730171a8aea624faaefb77aa109ebe, type: 3}
+  crackHitSound: {fileID: 8300000, guid: f9d367227dc382f47a8e4dcfec835d2e, type: 3}
+--- !u!114 &920010004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 680079852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c6d7c61b674a494d90878e4f0cedd90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionRadius: 2
+  holeRadius: 0.6
+  crackAnimDuration: 1.1
+  phaseSprites: []
+  holeSprite: {fileID: 3807138539493061304, guid: c8f1eaa5b8660624ca4705802783ca7d, type: 3}
+  holeTileObject: {fileID: 0}
+  hideExplodingTileWhenOpen: 1
+  crackAnimatorStateName: explodingtilesl
+  crackLeadSound: {fileID: 8300000, guid: 90730171a8aea624faaefb77aa109ebe, type: 3}
+  crackHitSound: {fileID: 8300000, guid: f9d367227dc382f47a8e4dcfec835d2e, type: 3}
+--- !u!114 &920010005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 822569716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c6d7c61b674a494d90878e4f0cedd90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionRadius: 2
+  holeRadius: 0.6
+  crackAnimDuration: 1.1
+  phaseSprites: []
+  holeSprite: {fileID: 3807138539493061304, guid: c8f1eaa5b8660624ca4705802783ca7d, type: 3}
+  holeTileObject: {fileID: 0}
+  hideExplodingTileWhenOpen: 1
+  crackAnimatorStateName: explodingtilesl
+  crackLeadSound: {fileID: 8300000, guid: 90730171a8aea624faaefb77aa109ebe, type: 3}
+  crackHitSound: {fileID: 8300000, guid: f9d367227dc382f47a8e4dcfec835d2e, type: 3}
+--- !u!114 &920010006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 998807473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c6d7c61b674a494d90878e4f0cedd90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionRadius: 2
+  holeRadius: 0.6
+  crackAnimDuration: 1.1
+  phaseSprites: []
+  holeSprite: {fileID: 3807138539493061304, guid: c8f1eaa5b8660624ca4705802783ca7d, type: 3}
+  holeTileObject: {fileID: 0}
+  hideExplodingTileWhenOpen: 1
+  crackAnimatorStateName: explodingtilesl
+  crackLeadSound: {fileID: 8300000, guid: 90730171a8aea624faaefb77aa109ebe, type: 3}
+  crackHitSound: {fileID: 8300000, guid: f9d367227dc382f47a8e4dcfec835d2e, type: 3}
+--- !u!114 &920010007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1126584474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c6d7c61b674a494d90878e4f0cedd90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionRadius: 2
+  holeRadius: 0.6
+  crackAnimDuration: 1.1
+  phaseSprites: []
+  holeSprite: {fileID: 3807138539493061304, guid: c8f1eaa5b8660624ca4705802783ca7d, type: 3}
+  holeTileObject: {fileID: 0}
+  hideExplodingTileWhenOpen: 1
+  crackAnimatorStateName: explodingtilesl
+  crackLeadSound: {fileID: 8300000, guid: 90730171a8aea624faaefb77aa109ebe, type: 3}
+  crackHitSound: {fileID: 8300000, guid: f9d367227dc382f47a8e4dcfec835d2e, type: 3}
+--- !u!114 &920010008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1176236532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c6d7c61b674a494d90878e4f0cedd90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionRadius: 2
+  holeRadius: 0.6
+  crackAnimDuration: 1.1
+  phaseSprites: []
+  holeSprite: {fileID: 3807138539493061304, guid: c8f1eaa5b8660624ca4705802783ca7d, type: 3}
+  holeTileObject: {fileID: 0}
+  hideExplodingTileWhenOpen: 1
+  crackAnimatorStateName: explodingtilesl
+  crackLeadSound: {fileID: 8300000, guid: 90730171a8aea624faaefb77aa109ebe, type: 3}
+  crackHitSound: {fileID: 8300000, guid: f9d367227dc382f47a8e4dcfec835d2e, type: 3}
+--- !u!114 &920010009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1408919241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c6d7c61b674a494d90878e4f0cedd90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionRadius: 2
+  holeRadius: 0.6
+  crackAnimDuration: 1.1
+  phaseSprites: []
+  holeSprite: {fileID: 3807138539493061304, guid: c8f1eaa5b8660624ca4705802783ca7d, type: 3}
+  holeTileObject: {fileID: 0}
+  hideExplodingTileWhenOpen: 1
+  crackAnimatorStateName: explodingtilesl
+  crackLeadSound: {fileID: 8300000, guid: 90730171a8aea624faaefb77aa109ebe, type: 3}
+  crackHitSound: {fileID: 8300000, guid: f9d367227dc382f47a8e4dcfec835d2e, type: 3}
+--- !u!114 &920010010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1484264520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c6d7c61b674a494d90878e4f0cedd90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionRadius: 2
+  holeRadius: 0.6
+  crackAnimDuration: 1.1
+  phaseSprites: []
+  holeSprite: {fileID: 3807138539493061304, guid: c8f1eaa5b8660624ca4705802783ca7d, type: 3}
+  holeTileObject: {fileID: 0}
+  hideExplodingTileWhenOpen: 1
+  crackAnimatorStateName: explodingtilesl
+  crackLeadSound: {fileID: 8300000, guid: 90730171a8aea624faaefb77aa109ebe, type: 3}
+  crackHitSound: {fileID: 8300000, guid: f9d367227dc382f47a8e4dcfec835d2e, type: 3}
+--- !u!114 &920010011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1576308648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c6d7c61b674a494d90878e4f0cedd90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionRadius: 2
+  holeRadius: 0.6
+  crackAnimDuration: 1.1
+  phaseSprites: []
+  holeSprite: {fileID: 3807138539493061304, guid: c8f1eaa5b8660624ca4705802783ca7d, type: 3}
+  holeTileObject: {fileID: 0}
+  hideExplodingTileWhenOpen: 1
+  crackAnimatorStateName: explodingtilesl
+  crackLeadSound: {fileID: 8300000, guid: 90730171a8aea624faaefb77aa109ebe, type: 3}
+  crackHitSound: {fileID: 8300000, guid: f9d367227dc382f47a8e4dcfec835d2e, type: 3}
+--- !u!114 &920010012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1768470248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c6d7c61b674a494d90878e4f0cedd90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionRadius: 2
+  holeRadius: 0.6
+  crackAnimDuration: 1.1
+  phaseSprites: []
+  holeSprite: {fileID: 3807138539493061304, guid: c8f1eaa5b8660624ca4705802783ca7d, type: 3}
+  holeTileObject: {fileID: 0}
+  hideExplodingTileWhenOpen: 1
+  crackAnimatorStateName: explodingtilesl
+  crackLeadSound: {fileID: 8300000, guid: 90730171a8aea624faaefb77aa109ebe, type: 3}
+  crackHitSound: {fileID: 8300000, guid: f9d367227dc382f47a8e4dcfec835d2e, type: 3}
+--- !u!114 &920010013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1838671020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c6d7c61b674a494d90878e4f0cedd90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionRadius: 2
+  holeRadius: 0.6
+  crackAnimDuration: 1.1
+  phaseSprites: []
+  holeSprite: {fileID: 3807138539493061304, guid: c8f1eaa5b8660624ca4705802783ca7d, type: 3}
+  holeTileObject: {fileID: 0}
+  hideExplodingTileWhenOpen: 1
+  crackAnimatorStateName: explodingtilesl
+  crackLeadSound: {fileID: 8300000, guid: 90730171a8aea624faaefb77aa109ebe, type: 3}
+  crackHitSound: {fileID: 8300000, guid: f9d367227dc382f47a8e4dcfec835d2e, type: 3}
+--- !u!114 &920010014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1933635360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c6d7c61b674a494d90878e4f0cedd90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionRadius: 2
+  holeRadius: 0.6
+  crackAnimDuration: 1.1
+  phaseSprites: []
+  holeSprite: {fileID: 3807138539493061304, guid: c8f1eaa5b8660624ca4705802783ca7d, type: 3}
+  holeTileObject: {fileID: 0}
+  hideExplodingTileWhenOpen: 1
+  crackAnimatorStateName: explodingtilesl
+  crackLeadSound: {fileID: 8300000, guid: 90730171a8aea624faaefb77aa109ebe, type: 3}
+  crackHitSound: {fileID: 8300000, guid: f9d367227dc382f47a8e4dcfec835d2e, type: 3}
+--- !u!114 &920010015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1974205781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c6d7c61b674a494d90878e4f0cedd90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionRadius: 2
+  holeRadius: 0.6
+  crackAnimDuration: 1.1
+  phaseSprites: []
+  holeSprite: {fileID: 3807138539493061304, guid: c8f1eaa5b8660624ca4705802783ca7d, type: 3}
+  holeTileObject: {fileID: 0}
+  hideExplodingTileWhenOpen: 1
+  crackAnimatorStateName: explodingtilesl
+  crackLeadSound: {fileID: 8300000, guid: 90730171a8aea624faaefb77aa109ebe, type: 3}
+  crackHitSound: {fileID: 8300000, guid: f9d367227dc382f47a8e4dcfec835d2e, type: 3}

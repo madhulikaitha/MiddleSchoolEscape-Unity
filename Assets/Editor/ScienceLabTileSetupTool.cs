@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public static class ScienceLabTileSetupTool
 {
@@ -39,6 +40,78 @@ public static class ScienceLabTileSetupTool
         int configuredCount = ConfigureSceneCrackingTiles(extractedPhases, holeSprite);
 
         Debug.Log($"ScienceLab setup complete. Extracted {extractedPhases.Count} phase sprites and configured {configuredCount} CrackingTile objects.");
+    }
+
+    private const string TileLeadSoundPath = "Assets/Audio/tileexplodingsound.mp3";
+    private const string TileHitSoundPath = "Assets/Audio/tileexplosionhit.mp3";
+
+    [MenuItem("Tools/Science Lab/Wire SL Exploding Tiles (CrackingTile + audio)")]
+    public static void WireSlExplodingTiles()
+    {
+        AudioClip lead = AssetDatabase.LoadAssetAtPath<AudioClip>(TileLeadSoundPath);
+        AudioClip hit = AssetDatabase.LoadAssetAtPath<AudioClip>(TileHitSoundPath);
+        if (lead == null || hit == null)
+        {
+            Debug.LogError("Science Lab wire failed: load tileexplodingsound.mp3 and tileexplosionhit.mp3 from Assets/Audio.");
+            return;
+        }
+
+        Sprite holeSprite = LoadHoleSprite();
+        GameObject[] holes = Object.FindObjectsByType<GameObject>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+            .Where(go => go.name.Contains("Holetile-S"))
+            .ToArray();
+
+        GameObject[] allGos = Object.FindObjectsByType<GameObject>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        var dirtyScenes = new HashSet<Scene>();
+
+        int count = 0;
+        foreach (GameObject go in allGos)
+        {
+            if (go.name.IndexOf("Explodingtile-SL", System.StringComparison.Ordinal) < 0)
+                continue;
+
+            CrackingTile tile = go.GetComponent<CrackingTile>();
+            if (tile == null)
+                tile = go.AddComponent<CrackingTile>();
+
+            SerializedObject so = new SerializedObject(tile);
+            so.FindProperty("crackAnimatorStateName").stringValue = "explodingtilesl";
+            so.FindProperty("crackLeadSound").objectReferenceValue = lead;
+            so.FindProperty("crackHitSound").objectReferenceValue = hit;
+            so.FindProperty("holeSprite").objectReferenceValue = holeSprite;
+
+            GameObject nearest = FindNearestHole(tile.transform.position, holes, 0.6f);
+            so.FindProperty("holeTileObject").objectReferenceValue = nearest;
+
+            SerializedProperty phases = so.FindProperty("phaseSprites");
+            phases.ClearArray();
+
+            so.ApplyModifiedProperties();
+            EditorUtility.SetDirty(tile);
+            dirtyScenes.Add(go.scene);
+            count++;
+        }
+
+        foreach (Scene scene in dirtyScenes)
+        {
+            if (scene.IsValid())
+                EditorSceneManager.MarkSceneDirty(scene);
+        }
+
+        if (count > 0)
+            Debug.Log($"Science Lab wire: configured {count} SL exploding tiles with explodingtilesl + audio.");
+        else
+            Debug.LogWarning("Science Lab wire: no GameObjects with 'Explodingtile-SL' in the name were found.");
+    }
+
+    /// <summary>
+    /// Batch-mode entry point (Unity -executeMethod ScienceLabTileSetupTool.WireSlExplodingTilesBatch).
+    /// </summary>
+    public static void WireSlExplodingTilesBatch()
+    {
+        WireSlExplodingTiles();
+        AssetDatabase.SaveAssets();
+        EditorSceneManager.SaveOpenScenes();
     }
 
     private static List<Sprite> ExtractPhaseSprites(string crackSheetPath, string outputFolder)

@@ -5,6 +5,9 @@ using UnityEngine;
 // Configure phaseSprites with the 6 phases from a820050d-407f-4085-b982-1705ff566f06.
 // The tile starts on phaseSprites[0], then transitions through phases smoothly when
 // the player gets close. After the last phase, it switches to hole mode.
+//
+// Science Lab SL tiles: set crackAnimatorStateName (e.g. explodingtilesl) to drive
+// Assets/SL-Animations clips; optional crackLeadSound / crackHitSound play in order.
 public class CrackingTile : MonoBehaviour
 {
     [Header("Detection")]
@@ -27,19 +30,44 @@ public class CrackingTile : MonoBehaviour
     [Tooltip("If true and a holeTileObject is set, exploding sprite is hidden after crack")]
     public bool hideExplodingTileWhenOpen = true;
 
+    [Header("Animator (Science Lab / SL)")]
+    [Tooltip("Animator state name to play when set (e.g. explodingtilesl). Overrides phase sprite swap.")]
+    public string crackAnimatorStateName = "";
+
+    [Header("Audio")]
+    public AudioClip crackLeadSound;
+    [Tooltip("Played after crackLeadSound finishes")]
+    public AudioClip crackHitSound;
+
     private Animator anim;
     private SpriteRenderer sr;
+    private AudioSource audioSource;
     private CircleCollider2D zoneTrigger;
     private bool hasCracked;
     private bool isHoleOpen;
+
+    private bool UsesAnimatorCrack => anim != null && !string.IsNullOrEmpty(crackAnimatorStateName);
 
     private void Awake()
     {
         anim = GetComponent<Animator>();
         sr = GetComponent<SpriteRenderer>();
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null && (crackLeadSound != null || crackHitSound != null))
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.playOnAwake = false;
+        }
 
-        // Start on phase 1 so the tile always appears intact before trigger.
-        if (phaseSprites != null && phaseSprites.Length > 0 && sr != null)
+        if (UsesAnimatorCrack)
+        {
+            if (anim != null)
+            {
+                anim.enabled = true;
+                anim.speed = 0f;
+            }
+        }
+        else if (phaseSprites != null && phaseSprites.Length > 0 && sr != null)
         {
             sr.sprite = phaseSprites[0];
             if (anim != null)
@@ -47,7 +75,6 @@ public class CrackingTile : MonoBehaviour
         }
         else if (anim != null)
         {
-            // Fallback for animator-driven setups.
             anim.speed = 0f;
         }
 
@@ -80,9 +107,26 @@ public class CrackingTile : MonoBehaviour
     {
         hasCracked = true;
 
-        bool usesPhaseSprites = phaseSprites != null && phaseSprites.Length > 1 && sr != null;
+        bool usesPhaseSprites = !UsesAnimatorCrack && phaseSprites != null && phaseSprites.Length > 1 && sr != null;
 
-        if (usesPhaseSprites)
+        if (UsesAnimatorCrack)
+        {
+            anim.enabled = true;
+            anim.speed = 1f;
+            anim.Play(crackAnimatorStateName, 0, 0f);
+
+            if (audioSource != null && crackLeadSound != null)
+                audioSource.PlayOneShot(crackLeadSound);
+
+            if (crackLeadSound != null)
+                yield return new WaitForSeconds(crackLeadSound.length);
+
+            if (audioSource != null && crackHitSound != null)
+                audioSource.PlayOneShot(crackHitSound);
+
+            yield return StartCoroutine(WaitForAnimatorStateComplete(crackAnimatorStateName));
+        }
+        else if (usesPhaseSprites)
         {
             float perPhase = crackAnimDuration / (phaseSprites.Length - 1);
             perPhase = Mathf.Max(0.02f, perPhase);
@@ -95,7 +139,6 @@ public class CrackingTile : MonoBehaviour
         }
         else if (anim != null)
         {
-            // Fallback for legacy animator-driven tiles.
             anim.speed = 1f;
             anim.Play("Exploding tile", 0, 0f);
             yield return new WaitForSeconds(crackAnimDuration);
@@ -121,5 +164,21 @@ public class CrackingTile : MonoBehaviour
         // Shrink trigger to the hole size for the damage zone
         zoneTrigger.radius = holeRadius;
         isHoleOpen = true;
+    }
+
+    private IEnumerator WaitForAnimatorStateComplete(string stateName)
+    {
+        yield return null;
+
+        float timeout = 10f;
+        while (timeout > 0f)
+        {
+            AnimatorStateInfo si = anim.GetCurrentAnimatorStateInfo(0);
+            if (si.IsName(stateName) && si.normalizedTime >= 1f)
+                yield break;
+
+            timeout -= Time.deltaTime;
+            yield return null;
+        }
     }
 }
