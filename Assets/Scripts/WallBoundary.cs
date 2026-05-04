@@ -125,12 +125,25 @@ public class WallBoundary : MonoBehaviour
 
     private void Awake()
     {
+        // If __WallBoundaries was baked in the editor and saved with the scene, skip rebuilding.
+        var existing = GameObject.Find("__WallBoundaries");
+        if (existing != null && existing.transform.childCount > 0)
+        {
+            Debug.Log("WallBoundary: Using baked wall boundaries from scene.");
+            return;
+        }
+
         BuildWallBoundaries();
     }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void EnsureWallBoundaryWhenMissingFromScene()
     {
+        // If baked boundaries already exist in the scene, do nothing.
+        var baked = GameObject.Find("__WallBoundaries");
+        if (baked != null && baked.transform.childCount > 0)
+            return;
+
         var found = Object.FindFirstObjectByType<WallBoundary>(FindObjectsInactive.Include);
         if (found != null)
         {
@@ -141,13 +154,17 @@ public class WallBoundary : MonoBehaviour
         new GameObject("__WallBoundaryAuthoring").AddComponent<WallBoundary>();
     }
 
-    /// <summary>Rebuilds colliders from current Inspector values (optional call from other scripts).</summary>
+    /// <summary>Rebuilds colliders from current Inspector values. Call via Context Menu to bake into the scene.</summary>
     public void BuildWallBoundaries()
     {
         var existing = GameObject.Find("__WallBoundaries");
         if (existing != null)
         {
+#if UNITY_EDITOR
+            DestroyImmediate(existing);
+#else
             Destroy(existing);
+#endif
         }
 
         var root = new GameObject("__WallBoundaries");
@@ -229,6 +246,14 @@ public class WallBoundary : MonoBehaviour
     }
 
 #if UNITY_EDITOR
+    [ContextMenu("Bake Wall Boundaries to Scene")]
+    private void EditorBakeWallBoundaries()
+    {
+        BuildWallBoundaries();
+        UnityEditor.EditorUtility.SetDirty(gameObject);
+        Debug.Log("WallBoundary: Baked wall boundaries. Save the scene to persist them — they won't be rebuilt at runtime.");
+    }
+
     [ContextMenu("Match hallway room to Maze-H sprite bounds")]
     private void EditorMatchHallwayToMazeH()
     {
