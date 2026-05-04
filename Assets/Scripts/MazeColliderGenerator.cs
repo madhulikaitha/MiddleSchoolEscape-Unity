@@ -31,6 +31,13 @@ public class MazeColliderGenerator : MonoBehaviour
 
     private void Start()
     {
+        // If colliders were baked in the editor and saved with the scene, skip generation.
+        if (transform.childCount > 0)
+        {
+            Debug.Log($"MazeColliderGenerator on '{name}': using {transform.childCount} baked colliders from scene.");
+            return;
+        }
+
         GenerateColliders();
     }
 
@@ -46,6 +53,16 @@ public class MazeColliderGenerator : MonoBehaviour
         {
             Debug.LogError($"MazeColliderGenerator on '{name}': texture is not readable. Enable Read/Write in texture import settings.");
             return;
+        }
+
+        // Clear any existing baked children before regenerating.
+        for (int i = transform.childCount - 1; i >= 0; i--)
+        {
+#if UNITY_EDITOR
+            DestroyImmediate(transform.GetChild(i).gameObject);
+#else
+            Destroy(transform.GetChild(i).gameObject);
+#endif
         }
 
         var rect = sprite.rect;
@@ -180,4 +197,23 @@ public class MazeColliderGenerator : MonoBehaviour
 
         return brightCorners >= 3;
     }
+
+#if UNITY_EDITOR
+    [ContextMenu("Bake Colliders to Scene")]
+    private void EditorBakeColliders()
+    {
+        GenerateColliders();
+        UnityEditor.EditorUtility.SetDirty(gameObject);
+        Debug.Log($"MazeColliderGenerator: Baked colliders on '{name}'. Save the scene to persist them.");
+    }
+
+    [ContextMenu("Clear Baked Colliders")]
+    private void EditorClearColliders()
+    {
+        for (int i = transform.childCount - 1; i >= 0; i--)
+            DestroyImmediate(transform.GetChild(i).gameObject);
+        UnityEditor.EditorUtility.SetDirty(gameObject);
+        Debug.Log($"MazeColliderGenerator: Cleared baked colliders on '{name}'.");
+    }
+#endif
 }
