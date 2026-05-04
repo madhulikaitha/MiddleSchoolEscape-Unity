@@ -1,0 +1,733 @@
+fileFormatVersion: 2
+guid: 73884250ae4a15347a030576c941b443
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8371797257013365808
+    second: gas_sprite_transparent_0
+  - first:
+      213: 218109875967570253
+    second: gas_sprite_transparent_1
+  - first:
+      213: 4590152186561252236
+    second: gas_sprite_transparent_2
+  - first:
+      213: 3828254914969417612
+    second: gas_sprite_transparent_3
+  - first:
+      213: -6559888489202950840
+    second: gas_sprite_transparent_4
+  - first:
+      213: -5844823619411756391
+    second: gas_sprite_transparent_5
+  - first:
+      213: 1006733512983194070
+    second: gas_sprite_transparent_6
+  - first:
+      213: -477834444414180357
+    second: gas_sprite_transparent_7
+  - first:
+      213: 2298964028786561968
+    second: gas_sprite_transparent_8
+  - first:
+      213: -8522377473837529829
+    second: gas_sprite_transparent_9
+  - first:
+      213: 7284837293782789719
+    second: gas_sprite_transparent_10
+  - first:
+      213: 3027987893284166537
+    second: gas_sprite_transparent_11
+  - first:
+      213: 8952358275672988660
+    second: gas_sprite_transparent_12
+  - first:
+      213: 8042693994416625351
+    second: gas_sprite_transparent_13
+  - first:
+      213: -6400211444530029650
+    second: gas_sprite_transparent_14
+  - first:
+      213: 1345434711765697290
+    second: gas_sprite_transparent_15
+  - first:
+      213: 1144131649578914382
+    second: gas_sprite_transparent_16
+  - first:
+      213: 3305889673825995432
+    second: gas_sprite_transparent_17
+  - first:
+      213: -3902106298378588876
+    second: gas_sprite_transparent_18
+  - first:
+      213: 8791196294768503936
+    second: gas_sprite_transparent_19
+  - first:
+      213: -3514249392568027462
+    second: gas_sprite_transparent_20
+  - first:
+      213: -8531284826867590374
+    second: gas_sprite_transparent_21
+  - first:
+      213: 394357744518721800
+    second: gas_sprite_transparent_22
+  - first:
+      213: -8720666188219435791
+    second: gas_sprite_transparent_23
+  - first:
+      213: -8409638400830213329
+    second: gas_sprite_transparent_24
+  - first:
+      213: 2649254919118741635
+    second: gas_sprite_transparent_25
+  - first:
+      213: -798356048566450811
+    second: gas_sprite_transparent_26
+  - first:
+      213: -109817442944335054
+    second: gas_sprite_transparent_27
+  - first:
+      213: 8329710198309051744
+    second: gas_sprite_transparent_28
+  - first:
+      213: -8561246894430163299
+    second: gas_sprite_transparent_29
+  - first:
+      213: -96041390963148461
+    second: gas_sprite_transparent_30
+  - first:
+      213: -2716566969664277494
+    second: gas_sprite_transparent_31
+  - first:
+      213: 8268830099442660903
+    second: gas_sprite_transparent_32
+  - first:
+      213: -3256131204074828009
+    second: gas_sprite_transparent_33
+  - first:
+      213: -1388266285569465048
+    second: gas_sprite_transparent_34
+  - first:
+      213: 38812643078823350
+    second: gas_sprite_transparent_35
+  - first:
+      213: 3951776446210829092
+    second: gas_sprite_transparent_36
+  - first:
+      213: -4819800901234556703
+    second: gas_sprite_transparent_37
+  - first:
+      213: 2877652391187648425
+    second: gas_sprite_transparent_38
+  - first:
+      213: -7043886433246351757
+    second: gas_sprite_transparent_39
+  - first:
+      213: -6948385137608179811
+    second: gas_sprite_transparent_40
+  - first:
+      213: -9140932351165391758
+    second: gas_sprite_transparent_41
+  - first:
+      213: -516266329472415164
+    second: gas_sprite_transparent_42
+  - first:
+      213: 4728727486364940030
+    second: gas_sprite_transparent_43
+  - first:
+      213: 3862671628221556940
+    second: gas_sprite_transparent_44
+  - first:
+      213: -8300149468340399909
+    second: gas_sprite_transparent_45
+  - first:
+      213: 6784405311707231143
+    second: gas_sprite_transparent_46
+  - first:
+      213: -1830075025099361195
+    second: gas_sprite_transparent_47
+  - first:
+      213: -5504610812107839957
+    second: gas_sprite_transparent_48
+  - first:
+      213: 5569496650912763310
+    second: gas_sprite_transparent_49
+  - first:
+      213: -2590044662590364069
+    second: gas_sprite_transparent_50
+  - first:
+      213: -632972739064383062
+    second: gas_sprite_transparent_51
+  - first:
+      213: -8277783997904722851
+    second: gas_sprite_transparent_52
+  - first:
+      213: 8479820948018890127
+    second: gas_sprite_transparent_53
+  - first:
+      213: 4468096178655319449
+    second: gas_sprite_transparent_54
+  - first:
+      213: 963443239766482076
+    second: gas_sprite_transparent_55
+  - first:
+      213: 2538667343342329986
+    second: gas_sprite_transparent_56
+  - first:
+      213: -3184855256447629708
+    second: gas_sprite_transparent_57
+  - first:
+      213: -4377455212921522479
+    second: gas_sprite_transparent_58
+  - first:
+      213: 1684075399375953424
+    second: gas_sprite_transparent_59
+  - first:
+      213: -369659353215684396
+    second: gas_sprite_transparent_60
+  - first:
+      213: -585021030507840233
+    second: gas_sprite_transparent_61
+  - first:
+      213: -600581316413437761
+    second: gas_sprite_transparent_62
+  - first:
+      213: 8660217028313448969
+    second: gas_sprite_transparent_63
+  - first:
+      213: 345136624333263045
+    second: gas_sprite_transparent_64
+  - first:
+      213: 7897639645631109508
+    second: gas_sprite_transparent_65
+  - first:
+      213: 35631203331129162
+    second: gas_sprite_transparent_66
+  - first:
+      213: -7117054420363212775
+    second: gas_sprite_transparent_67
+  - first:
+      213: -8662146083247588790
+    second: gas_sprite_transparent_68
+  - first:
+      213: -8616689293528461499
+    second: gas_sprite_transparent_69
+  - first:
+      213: 2812305993322003525
+    second: gas_sprite_transparent_70
+  - first:
+      213: -7208824266859063577
+    second: gas_sprite_transparent_71
+  - first:
+      213: 3360114158054772572
+    second: gas_sprite_transparent_72
+  - first:
+      213: -6486044659828284184
+    second: gas_sprite_transparent_73
+  - first:
+      213: -5265600095529498921
+    second: gas_sprite_transparent_74
+  - first:
+      213: -836123518908447599
+    second: gas_sprite_transparent_75
+  - first:
+      213: 353577841678665484
+    second: gas_sprite_transparent_76
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: gas_sprite_transparent_0
+      rect:
+        serializedVersion: 2
+        x: 1204
+        y: 677
+        width: 183
+        height: 311
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d3f02c10c661db80800000000000000
+      internalID: -8371797257013365808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gas_sprite_transparent_3
+      rect:
+        serializedVersion: 2
+        x: 846
+        y: 678
+        width: 127
+        height: 291
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c87356cef81b02530800000000000000
+      internalID: 3828254914969417612
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gas_sprite_transparent_7
+      rect:
+        serializedVersion: 2
+        x: 508
+        y: 679
+        width: 102
+        height: 232
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf32f3fba146e59f0800000000000000
+      internalID: -477834444414180357
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gas_sprite_transparent_12
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 679
+        width: 94
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4fb548b8b6a2d3c70800000000000000
+      internalID: 8952358275672988660
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gas_sprite_transparent_23
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 374
+        width: 249
+        height: 257
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1f4bb6e4e48f9f680800000000000000
+      internalID: -8720666188219435791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gas_sprite_transparent_25
+      rect:
+        serializedVersion: 2
+        x: 792
+        y: 374
+        width: 235
+        height: 260
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3806785005b04c420800000000000000
+      internalID: 2649254919118741635
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gas_sprite_transparent_26
+      rect:
+        serializedVersion: 2
+        x: 1140
+        y: 373
+        width: 298
+        height: 264
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 58589e8576babe4f0800000000000000
+      internalID: -798356048566450811
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gas_sprite_transparent_28
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 373
+        width: 168
+        height: 249
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 06dd82cea43199370800000000000000
+      internalID: 8329710198309051744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gas_sprite_transparent_48
+      rect:
+        serializedVersion: 2
+        x: 1110
+        y: 55
+        width: 391
+        height: 281
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b26a98d81a1bb93b0800000000000000
+      internalID: -5504610812107839957
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gas_sprite_transparent_49
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 87
+        width: 255
+        height: 226
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ead026f02b3da4d40800000000000000
+      internalID: 5569496650912763310
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gas_sprite_transparent_52
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 82
+        width: 304
+        height: 226
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d54e97dbf476f1d80800000000000000
+      internalID: -8277783997904722851
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gas_sprite_transparent_59
+      rect:
+        serializedVersion: 2
+        x: 735
+        y: 73
+        width: 333
+        height: 244
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 01e17c237a90f5710800000000000000
+      internalID: 1684075399375953424
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gas_sprite_transparent_75
+      rect:
+        serializedVersion: 2
+        x: 907
+        y: 71
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 194cc1be61e7564f0800000000000000
+      internalID: -836123518908447599
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gas_sprite_transparent_76
+      rect:
+        serializedVersion: 2
+        x: 929
+        y: 70
+        width: 9
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c07c4b57c2928e400800000000000000
+      internalID: 353577841678665484
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: ffbb67bbf8dfaa347a0662d54eb682d6
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      gas_sprite_transparent_0: -8371797257013365808
+      gas_sprite_transparent_1: 218109875967570253
+      gas_sprite_transparent_10: 7284837293782789719
+      gas_sprite_transparent_11: 3027987893284166537
+      gas_sprite_transparent_12: 8952358275672988660
+      gas_sprite_transparent_13: 8042693994416625351
+      gas_sprite_transparent_14: -6400211444530029650
+      gas_sprite_transparent_15: 1345434711765697290
+      gas_sprite_transparent_16: 1144131649578914382
+      gas_sprite_transparent_17: 3305889673825995432
+      gas_sprite_transparent_18: -3902106298378588876
+      gas_sprite_transparent_19: 8791196294768503936
+      gas_sprite_transparent_2: 4590152186561252236
+      gas_sprite_transparent_20: -3514249392568027462
+      gas_sprite_transparent_21: -8531284826867590374
+      gas_sprite_transparent_22: 394357744518721800
+      gas_sprite_transparent_23: -8720666188219435791
+      gas_sprite_transparent_24: -8409638400830213329
+      gas_sprite_transparent_25: 2649254919118741635
+      gas_sprite_transparent_26: -798356048566450811
+      gas_sprite_transparent_27: -109817442944335054
+      gas_sprite_transparent_28: 8329710198309051744
+      gas_sprite_transparent_29: -8561246894430163299
+      gas_sprite_transparent_3: 3828254914969417612
+      gas_sprite_transparent_30: -96041390963148461
+      gas_sprite_transparent_31: -2716566969664277494
+      gas_sprite_transparent_32: 8268830099442660903
+      gas_sprite_transparent_33: -3256131204074828009
+      gas_sprite_transparent_34: -1388266285569465048
+      gas_sprite_transparent_35: 38812643078823350
+      gas_sprite_transparent_36: 3951776446210829092
+      gas_sprite_transparent_37: -4819800901234556703
+      gas_sprite_transparent_38: 2877652391187648425
+      gas_sprite_transparent_39: -7043886433246351757
+      gas_sprite_transparent_4: -6559888489202950840
+      gas_sprite_transparent_40: -6948385137608179811
+      gas_sprite_transparent_41: -9140932351165391758
+      gas_sprite_transparent_42: -516266329472415164
+      gas_sprite_transparent_43: 4728727486364940030
+      gas_sprite_transparent_44: 3862671628221556940
+      gas_sprite_transparent_45: -8300149468340399909
+      gas_sprite_transparent_46: 6784405311707231143
+      gas_sprite_transparent_47: -1830075025099361195
+      gas_sprite_transparent_48: -5504610812107839957
+      gas_sprite_transparent_49: 5569496650912763310
+      gas_sprite_transparent_5: -5844823619411756391
+      gas_sprite_transparent_50: -2590044662590364069
+      gas_sprite_transparent_51: -632972739064383062
+      gas_sprite_transparent_52: -8277783997904722851
+      gas_sprite_transparent_53: 8479820948018890127
+      gas_sprite_transparent_54: 4468096178655319449
+      gas_sprite_transparent_55: 963443239766482076
+      gas_sprite_transparent_56: 2538667343342329986
+      gas_sprite_transparent_57: -3184855256447629708
+      gas_sprite_transparent_58: -4377455212921522479
+      gas_sprite_transparent_59: 1684075399375953424
+      gas_sprite_transparent_6: 1006733512983194070
+      gas_sprite_transparent_60: -369659353215684396
+      gas_sprite_transparent_61: -585021030507840233
+      gas_sprite_transparent_62: -600581316413437761
+      gas_sprite_transparent_63: 8660217028313448969
+      gas_sprite_transparent_64: 345136624333263045
+      gas_sprite_transparent_65: 7897639645631109508
+      gas_sprite_transparent_66: 35631203331129162
+      gas_sprite_transparent_67: -7117054420363212775
+      gas_sprite_transparent_68: -8662146083247588790
+      gas_sprite_transparent_69: -8616689293528461499
+      gas_sprite_transparent_7: -477834444414180357
+      gas_sprite_transparent_70: 2812305993322003525
+      gas_sprite_transparent_71: -7208824266859063577
+      gas_sprite_transparent_72: 3360114158054772572
+      gas_sprite_transparent_73: -6486044659828284184
+      gas_sprite_transparent_74: -5265600095529498921
+      gas_sprite_transparent_75: -836123518908447599
+      gas_sprite_transparent_76: 353577841678665484
+      gas_sprite_transparent_8: 2298964028786561968
+      gas_sprite_transparent_9: -8522377473837529829
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
