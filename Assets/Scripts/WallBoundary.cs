@@ -249,9 +249,21 @@ public class WallBoundary : MonoBehaviour
     [ContextMenu("Bake Wall Boundaries to Scene")]
     private void EditorBakeWallBoundaries()
     {
-        BuildWallBoundaries();
-        UnityEditor.EditorUtility.SetDirty(gameObject);
-        Debug.Log("WallBoundary: Baked wall boundaries. Save the scene to persist them — they won't be rebuilt at runtime.");
+        // Remove old baked object properly so undo works.
+        var existing = GameObject.Find("__WallBoundaries");
+        if (existing != null)
+            UnityEditor.Undo.DestroyObjectImmediate(existing);
+
+        var root = new GameObject("__WallBoundaries");
+        UnityEditor.Undo.RegisterCreatedObjectUndo(root, "Bake Wall Boundaries");
+
+        CreateRoomWalls(root.transform, "Lobby", lobby);
+        CreateRoomWalls(root.transform, "Cafe", cafeteria);
+        CreateRoomWalls(root.transform, "Hall", hallway);
+        CreateRoomWalls(root.transform, "Lab", scienceLab);
+
+        UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(gameObject.scene);
+        Debug.Log($"WallBoundary: Baked {root.transform.childCount} wall objects into scene. Save (Cmd+S) to persist — they won't be rebuilt at runtime.");
     }
 
     [ContextMenu("Match hallway room to Maze-H sprite bounds")]
