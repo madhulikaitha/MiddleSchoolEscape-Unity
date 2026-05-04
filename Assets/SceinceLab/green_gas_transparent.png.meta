@@ -1,0 +1,313 @@
+fileFormatVersion: 2
+guid: dd9621b66e0e4bb4ebff19efafd8ef5f
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 7005922191511103082
+    second: green_gas_transparent_0
+  - first:
+      213: -1721294716803069344
+    second: green_gas_transparent_1
+  - first:
+      213: 415452984053584654
+    second: green_gas_transparent_2
+  - first:
+      213: 1062522810364177272
+    second: green_gas_transparent_3
+  - first:
+      213: -2598022727149861630
+    second: green_gas_transparent_4
+  - first:
+      213: -6639585052400397086
+    second: green_gas_transparent_5
+  - first:
+      213: 3395342705022871838
+    second: green_gas_transparent_6
+  - first:
+      213: 4415939154990154093
+    second: green_gas_transparent_7
+  - first:
+      213: -436246012179678398
+    second: green_gas_transparent_8
+  - first:
+      213: 1146189055616720343
+    second: green_gas_transparent_9
+  - first:
+      213: -3093917260271522702
+    second: green_gas_transparent_10
+  - first:
+      213: -5809004458712827703
+    second: green_gas_transparent_11
+  - first:
+      213: -7157425790771137883
+    second: green_gas_transparent_12
+  - first:
+      213: 7976266700151508095
+    second: green_gas_transparent_13
+  - first:
+      213: -5544558556111378598
+    second: green_gas_transparent_14
+  - first:
+      213: -3355201791929378685
+    second: green_gas_transparent_15
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: green_gas_transparent_2
+      rect:
+        serializedVersion: 2
+        x: 846
+        y: 210
+        width: 653
+        height: 634
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e03d36fa94cf3c500800000000000000
+      internalID: 415452984053584654
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: green_gas_transparent_3
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 285
+        width: 424
+        height: 479
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 87ba185ddd6debe00800000000000000
+      internalID: 1062522810364177272
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: green_gas_transparent_7
+      rect:
+        serializedVersion: 2
+        x: 46
+        y: 391
+        width: 251
+        height: 276
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d614deac341984d30800000000000000
+      internalID: 4415939154990154093
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: green_gas_transparent_9
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 533
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7dd99719fd418ef00800000000000000
+      internalID: 1146189055616720343
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: green_gas_transparent_14
+      rect:
+        serializedVersion: 2
+        x: 1221
+        y: 211
+        width: 14
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a57e0aa9e55cd03b0800000000000000
+      internalID: -5544558556111378598
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: green_gas_transparent_15
+      rect:
+        serializedVersion: 2
+        x: 1323
+        y: 214
+        width: 14
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3889b423fbdef61d0800000000000000
+      internalID: -3355201791929378685
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 90d09c33aaec2c44a83e9d13a4672dc0
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      green_gas_transparent_0: 7005922191511103082
+      green_gas_transparent_1: -1721294716803069344
+      green_gas_transparent_10: -3093917260271522702
+      green_gas_transparent_11: -5809004458712827703
+      green_gas_transparent_12: -7157425790771137883
+      green_gas_transparent_13: 7976266700151508095
+      green_gas_transparent_14: -5544558556111378598
+      green_gas_transparent_15: -3355201791929378685
+      green_gas_transparent_2: 415452984053584654
+      green_gas_transparent_3: 1062522810364177272
+      green_gas_transparent_4: -2598022727149861630
+      green_gas_transparent_5: -6639585052400397086
+      green_gas_transparent_6: 3395342705022871838
+      green_gas_transparent_7: 4415939154990154093
+      green_gas_transparent_8: -436246012179678398
+      green_gas_transparent_9: 1146189055616720343
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
