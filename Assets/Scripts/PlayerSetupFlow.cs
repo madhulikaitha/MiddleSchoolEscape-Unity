@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -22,6 +23,8 @@ public class PlayerSetupFlow : MonoBehaviour
     private Button nameContinueButton;
     private int selectedCharacterIndex = -1;
 
+    private readonly List<GameObject> suppressedGameplayHudRoots = new List<GameObject>();
+
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void Bootstrap()
     {
@@ -45,9 +48,30 @@ public class PlayerSetupFlow : MonoBehaviour
         LoadCharacterSpritesFromAssetsFolder();
         Debug.Log($"PlayerSetupFlow: Loaded {characterSpritesList.Count} characters.");
         EnsurePlayerExistsAtStartup();
+
+        if (PlayerSessionData.IsConfigured && PlayerSessionData.SelectedCharacterSprites != null)
+        {
+            EnterGameplayFromSavedSession();
+            return;
+        }
+
         CreateUi();
+        ApplySavedSelectionToUi();
         ShowNameScreenOnly();
         Debug.Log("PlayerSetupFlow: UI created successfully.");
+    }
+
+    /// <summary>If name and character are already set (e.g. scene reload), skip the title flow.</summary>
+    private void EnterGameplayFromSavedSession()
+    {
+        PlayerSessionData.BeginRun();
+        SpawnOrUpdatePlayer(PlayerSessionData.SelectedCharacterSprites);
+        var player = FindPlayerObject();
+        if (player != null)
+            player.transform.position = PlayerSessionData.LobbyWorldPosition;
+        EnsureGameplayHudExists();
+        Debug.Log("PlayerSetupFlow: Session already configured — skipping name/character screens.");
+        Destroy(gameObject);
     }
 
     private static Sprite LoadSetupSprite(string fileNameWithoutExtension)
@@ -157,9 +181,17 @@ public class PlayerSetupFlow : MonoBehaviour
     {
         EnsureEventSystem();
 
+        var existingSetupCanvas = GameObject.Find("PlayerSetupCanvas");
+        if (existingSetupCanvas != null)
+        {
+            Destroy(existingSetupCanvas);
+        }
+
         var canvasGo = new GameObject("PlayerSetupCanvas");
         var canvas = canvasGo.AddComponent<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.overrideSorting = true;
+        canvas.sortingOrder = 1000;
         var scaler = canvasGo.AddComponent<CanvasScaler>();
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         scaler.referenceResolution = new Vector2(1920f, 1080f);
@@ -172,6 +204,8 @@ public class PlayerSetupFlow : MonoBehaviour
 
         nameRoot.SetActive(true);
         charRoot.SetActive(false);
+
+        SuppressSceneGameplayHudForLobby();
     }
 
     private GameObject CreateNameScreen(Transform canvas)
@@ -206,10 +240,10 @@ public class PlayerSetupFlow : MonoBehaviour
         nameInput = CreateInputField(
             root.transform,
             "NameInput",
-            new Vector2(0f, -78f),
-            new Vector2(700f, 52f),
+            new Vector2(0f, -22f),
+            new Vector2(720f, 96f),
             transparentBackground: true);
-        nameInput.onValueChanged.AddListener(_ => UpdateNameContinueState());
+        nameInput.onValueChanged.AddListener(OnNameInputChanged);
 
         nameContinueButton = CreateArtUiButton(
             root.transform,
@@ -219,6 +253,8 @@ public class PlayerSetupFlow : MonoBehaviour
             170f,
             OnNameContinueClicked,
             "CONTINUE");
+        // Continue is created after the input and can overlap it in screen space; keep the field on top for clicks/focus.
+        nameInput.transform.SetAsLastSibling();
         UpdateNameContinueState();
 
         return root;
@@ -239,13 +275,16 @@ public class PlayerSetupFlow : MonoBehaviour
             var img = bg.GetComponent<Image>();
             img.sprite = bgSprite;
             img.type = Image.Type.Simple;
+            img.raycastTarget = false;
         }
         else
         {
             var panel = new GameObject("FallbackPanel", typeof(RectTransform), typeof(Image));
             panel.transform.SetParent(root.transform, false);
             StretchFull(panel.GetComponent<RectTransform>());
-            panel.GetComponent<Image>().color = new Color(0.1f, 0.12f, 0.22f, 1f);
+            var fallbackImg = panel.GetComponent<Image>();
+            fallbackImg.color = new Color(0.1f, 0.12f, 0.22f, 1f);
+            fallbackImg.raycastTarget = false;
         }
 
         statusText = CreateText(root.transform, "StatusText", "Choose your character:", 22, new Vector2(0f, 420f), new Vector2(900f, 48f));
@@ -296,10 +335,25 @@ public class PlayerSetupFlow : MonoBehaviour
     {
         nameRoot.SetActive(true);
         charRoot.SetActive(false);
-        if (nameInput != null)
+        StartCoroutine(FocusNameInputNextFrame());
+    }
+
+    private IEnumerator FocusNameInputNextFrame()
+    {
+        yield return null;
+        if (nameInput == null || nameRoot == null || !nameRoot.activeInHierarchy)
         {
-            nameInput.ActivateInputField();
+            yield break;
         }
+
+        nameInput.interactable = true;
+        if (EventSystem.current != null)
+        {
+            EventSystem.current.SetSelectedGameObject(nameInput.gameObject, null);
+        }
+
+        nameInput.Select();
+        nameInput.ActivateInputField();
     }
 
     private void ShowCharacterScreenOnly()
@@ -317,6 +371,24 @@ public class PlayerSetupFlow : MonoBehaviour
         }
 
         ShowCharacterScreenOnly();
+    }
+
+    private void OnNameInputChanged(string _)
+    {
+        if (nameInput == null)
+        {
+            return;
+        }
+
+        var upper = nameInput.text.ToUpperInvariant();
+        if (nameInput.text != upper)
+        {
+            var pos = nameInput.caretPosition;
+            nameInput.SetTextWithoutNotify(upper);
+            nameInput.caretPosition = Mathf.Min(pos, upper.Length);
+        }
+
+        UpdateNameContinueState();
     }
 
     private void EnsureEventSystem()
@@ -379,16 +451,19 @@ public class PlayerSetupFlow : MonoBehaviour
             image.color = new Color(0.95f, 0.92f, 0.82f, 0.98f);
         }
 
-        var pad = new Vector2(36f, 8f);
-        var text = CreateText(inputObject.transform, "Text", string.Empty, 26, Vector2.zero, size - pad);
-        text.alignment = TextAnchor.MiddleLeft;
-        text.color = new Color(0.18f, 0.14f, 0.1f, 1f);
+        // Bold, centered caps; dark blue over the tan name plate on the background art.
+        var pad = new Vector2(40f, 14f);
+        var nameBlue = new Color(0.07f, 0.16f, 0.48f, 1f);
+        var text = CreateText(inputObject.transform, "Text", string.Empty, 52, Vector2.zero, size - pad);
+        text.alignment = TextAnchor.MiddleCenter;
+        text.color = nameBlue;
+        text.fontStyle = FontStyle.Bold;
         text.raycastTarget = false;
 
-        var placeholder = CreateText(inputObject.transform, "Placeholder", "Your name", 24, Vector2.zero, size - pad);
-        placeholder.alignment = TextAnchor.MiddleLeft;
-        placeholder.color = new Color(0.35f, 0.32f, 0.28f, 0.75f);
-        placeholder.fontStyle = FontStyle.Italic;
+        var placeholder = CreateText(inputObject.transform, "Placeholder", "YOUR NAME", 48, Vector2.zero, size - pad);
+        placeholder.alignment = TextAnchor.MiddleCenter;
+        placeholder.color = new Color(nameBlue.r, nameBlue.g, nameBlue.b, 0.5f);
+        placeholder.fontStyle = FontStyle.Bold;
         placeholder.raycastTarget = false;
 
         var field = inputObject.GetComponent<InputField>();
@@ -488,17 +563,9 @@ public class PlayerSetupFlow : MonoBehaviour
         img.color = Color.white;
 
         var btn = btnGo.GetComponent<Button>();
-        btn.transition = Selectable.Transition.ColorTint;
+        // No color tint — avoids grey/dim overlays on imported button art (continue & start).
+        btn.transition = Selectable.Transition.None;
         btn.targetGraphic = img;
-        var c = btn.colors;
-        c.normalColor = Color.white;
-        c.highlightedColor = new Color(0.94f, 0.94f, 0.94f, 1f);
-        c.pressedColor = new Color(0.82f, 0.82f, 0.82f, 1f);
-        c.selectedColor = Color.white;
-        c.disabledColor = new Color(0.55f, 0.55f, 0.55f, 0.5f);
-        c.colorMultiplier = 1f;
-        c.fadeDuration = 0.08f;
-        btn.colors = c;
         btn.onClick.AddListener(onClick);
         return btn;
     }
@@ -554,7 +621,11 @@ public class PlayerSetupFlow : MonoBehaviour
 
         var selectedCharacter = characterSpritesList[selectedCharacterIndex];
         PlayerSessionData.Set(name, selectedCharacter);
+        PlayerSessionData.BeginRun();
         SpawnOrUpdatePlayer(selectedCharacter);
+
+        RestoreSuppressedGameplayHud();
+        EnsureGameplayHudExists();
 
         var canvas = GameObject.Find("PlayerSetupCanvas");
         if (canvas != null)
@@ -563,6 +634,52 @@ public class PlayerSetupFlow : MonoBehaviour
         }
 
         Destroy(gameObject);
+    }
+
+    private void SuppressSceneGameplayHudForLobby()
+    {
+        suppressedGameplayHudRoots.Clear();
+        foreach (var hud in FindObjectsByType<GameHUD>(FindObjectsSortMode.None))
+        {
+            if (hud == null)
+            {
+                continue;
+            }
+
+            var root = hud.gameObject;
+            if (!root.scene.IsValid())
+            {
+                continue;
+            }
+
+            suppressedGameplayHudRoots.Add(root);
+            root.SetActive(false);
+        }
+    }
+
+    private void RestoreSuppressedGameplayHud()
+    {
+        foreach (var go in suppressedGameplayHudRoots)
+        {
+            if (go != null)
+            {
+                go.SetActive(true);
+            }
+        }
+
+        suppressedGameplayHudRoots.Clear();
+    }
+
+    private static void EnsureGameplayHudExists()
+    {
+        if (FindFirstObjectByType<GameHUD>() != null)
+        {
+            return;
+        }
+
+        var hudGo = new GameObject("GameHUD");
+        hudGo.AddComponent<Canvas>();
+        hudGo.AddComponent<GameHUD>();
     }
 
     private static void SpawnOrUpdatePlayer(CharacterSprites characterSprites)
@@ -641,8 +758,15 @@ public class PlayerSetupFlow : MonoBehaviour
 
         EnsureMovementComponent(player);
         EnsureAnimatorComponent(player, characterSprites);
+        EnsureHealthComponent(player);
 
         Debug.Log($"SpawnOrUpdatePlayer: Complete! Player is at {player.transform.position}");
+    }
+
+    private static void EnsureHealthComponent(GameObject player)
+    {
+        if (player.GetComponent<PlayerHealth>() == null)
+            player.AddComponent<PlayerHealth>();
     }
 
     private static void EnsureMovementComponent(GameObject player)
@@ -681,12 +805,38 @@ public class PlayerSetupFlow : MonoBehaviour
             return taggedPlayer;
         }
 
+        var namedPlayer = GameObject.Find("Player");
+        if (namedPlayer != null)
+        {
+            return namedPlayer;
+        }
+
         var allTransforms = FindObjectsByType<Transform>(FindObjectsSortMode.None);
         foreach (var transformItem in allTransforms)
         {
-            if (transformItem.name.ToLowerInvariant().Contains("player"))
+            var go = transformItem.gameObject;
+            var lowerName = go.name.ToLowerInvariant();
+            if (!lowerName.Contains("player"))
             {
-                return transformItem.gameObject;
+                continue;
+            }
+
+            // Ignore setup/UI objects that happened to include "player" in their name.
+            if (lowerName.Contains("setup") || lowerName.Contains("canvas") || lowerName.Contains("ui"))
+            {
+                continue;
+            }
+
+            // Only treat it as the real player when behavior/components match.
+            bool looksLikePlayer =
+                go.GetComponent<PlayerMovement2D>() != null ||
+                go.GetComponent<PlayerAnimator>() != null ||
+                go.GetComponent<PlayerHealth>() != null ||
+                (go.GetComponent<SpriteRenderer>() != null && go.GetComponent<Rigidbody2D>() != null);
+
+            if (looksLikePlayer)
+            {
+                return go;
             }
         }
 
@@ -695,8 +845,9 @@ public class PlayerSetupFlow : MonoBehaviour
 
     private static Vector3 GetPlayerSpawnPosition()
     {
-        Debug.Log("GetPlayerSpawnPosition: Spawning player at origin (0, 0, 0)");
-        return Vector3.zero;
+        var pos = PlayerSessionData.LobbyWorldPosition;
+        Debug.Log($"GetPlayerSpawnPosition: Spawning player at lobby {pos}");
+        return pos;
     }
 
     private static Font CreateFunFont()
@@ -725,10 +876,46 @@ public class PlayerSetupFlow : MonoBehaviour
         if (existingPlayer != null)
         {
             Debug.Log("PlayerSetupFlow: Found existing Player object in scene.");
+            if (PlayerSessionData.SelectedCharacterSprites != null && PlayerSessionData.SelectedCharacterSprites.Front != null)
+            {
+                SpawnOrUpdatePlayer(PlayerSessionData.SelectedCharacterSprites);
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(PlayerSessionData.SelectedCharacterName))
+            {
+                for (var i = 0; i < characterSpritesList.Count; i++)
+                {
+                    if (string.Equals(characterSpritesList[i].Name, PlayerSessionData.SelectedCharacterName, System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        SpawnOrUpdatePlayer(characterSpritesList[i]);
+                        return;
+                    }
+                }
+            }
+
             return;
         }
 
         Debug.Log("PlayerSetupFlow: No Player found, creating one...");
+
+        if (PlayerSessionData.SelectedCharacterSprites != null && PlayerSessionData.SelectedCharacterSprites.Front != null)
+        {
+            SpawnOrUpdatePlayer(PlayerSessionData.SelectedCharacterSprites);
+            return;
+        }
+
+        if (!string.IsNullOrWhiteSpace(PlayerSessionData.SelectedCharacterName))
+        {
+            for (var i = 0; i < characterSpritesList.Count; i++)
+            {
+                if (string.Equals(characterSpritesList[i].Name, PlayerSessionData.SelectedCharacterName, System.StringComparison.OrdinalIgnoreCase))
+                {
+                    SpawnOrUpdatePlayer(characterSpritesList[i]);
+                    return;
+                }
+            }
+        }
 
         if (characterSpritesList.Count > 0)
         {
@@ -764,5 +951,31 @@ public class PlayerSetupFlow : MonoBehaviour
             Name = "Placeholder"
         };
         SpawnOrUpdatePlayer(placeholderCharacter);
+    }
+
+    private void ApplySavedSelectionToUi()
+    {
+        if (nameInput != null && !string.IsNullOrWhiteSpace(PlayerSessionData.PlayerName))
+        {
+            nameInput.text = PlayerSessionData.PlayerName.ToUpperInvariant();
+            UpdateNameContinueState();
+        }
+
+        if (string.IsNullOrWhiteSpace(PlayerSessionData.SelectedCharacterName))
+        {
+            UpdatePlayButtonState();
+            return;
+        }
+
+        for (var i = 0; i < characterSpritesList.Count; i++)
+        {
+            if (string.Equals(characterSpritesList[i].Name, PlayerSessionData.SelectedCharacterName, System.StringComparison.OrdinalIgnoreCase))
+            {
+                SelectCharacter(i);
+                return;
+            }
+        }
+
+        UpdatePlayButtonState();
     }
 }

@@ -130,32 +130,11 @@ public static class AutoPhysicsSetup2D
 
     private static void EnsurePlayerPhysics()
     {
-        GameObject player = null;
-        try
-        {
-            player = GameObject.FindGameObjectWithTag("Player");
-        }
-        catch (UnityException)
-        {
-            // Tag not defined — use name search below.
-        }
+        GameObject player = FindRealPlayerObject();
 
         if (player == null)
         {
-            var allTransforms = UnityEngine.Object.FindObjectsByType<Transform>(FindObjectsSortMode.None);
-            foreach (var t in allTransforms)
-            {
-                if (t != null && t.name.IndexOf("player", StringComparison.OrdinalIgnoreCase) >= 0)
-                {
-                    player = t.gameObject;
-                    break;
-                }
-            }
-        }
-
-        if (player == null)
-        {
-            Debug.LogWarning("AutoPhysicsSetup2D: No Player object found. Add a Player-tagged object to apply gravity/movement physics.");
+            // Player can be spawned later by setup flow; that's fine.
             return;
         }
 
@@ -177,6 +156,48 @@ public static class AutoPhysicsSetup2D
         {
             player.AddComponent<CapsuleCollider2D>();
         }
+    }
+
+    private static GameObject FindRealPlayerObject()
+    {
+        GameObject taggedPlayer = null;
+        try
+        {
+            taggedPlayer = GameObject.FindGameObjectWithTag("Player");
+        }
+        catch (UnityException)
+        {
+            // Tag may be undefined in this project.
+        }
+
+        if (taggedPlayer != null && IsLikelyGameplayPlayer(taggedPlayer))
+        {
+            return taggedPlayer;
+        }
+
+        var namedPlayer = GameObject.Find("Player");
+        if (namedPlayer != null && IsLikelyGameplayPlayer(namedPlayer))
+        {
+            return namedPlayer;
+        }
+
+        return null;
+    }
+
+    private static bool IsLikelyGameplayPlayer(GameObject go)
+    {
+        if (go == null) return false;
+
+        var lowerName = go.name.ToLowerInvariant();
+        if (lowerName.Contains("setup") || lowerName.Contains("canvas") || lowerName.Contains("ui"))
+        {
+            return false;
+        }
+
+        return go.GetComponent<PlayerMovement2D>() != null
+               || go.GetComponent<PlayerAnimator>() != null
+               || go.GetComponent<PlayerHealth>() != null
+               || go.GetComponent<SpriteRenderer>() != null;
     }
 }
 
