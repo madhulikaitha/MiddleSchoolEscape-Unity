@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Ends the run, writes the leaderboard file, shows the UI, and freezes gameplay.
@@ -37,14 +36,6 @@ public static class GameVictoryFlow
         }
 
         LeaderboardEndScreen.Show(rank, runId, last.PlayerName, last.ElapsedTimeSeconds);
-    }
-
-    internal static void OnPlayAgainClicked()
-    {
-        Time.timeScale = 1f;
-        sequenceActive = false;
-        PlayerSessionData.ClearForRestart();
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     private static void SetPlayerGameplayEnabled(GameObject player, bool enabled)

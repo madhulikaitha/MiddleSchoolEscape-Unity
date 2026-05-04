@@ -5,11 +5,27 @@ using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 
 /// <summary>
-/// Full-screen TOP 10 leaderboard after a successful run. Built at runtime (no prefab required).
+/// Full-screen TOP 10 leaderboard after a successful run. Uses Resources/Leaderboard/LeaderboardBackground as the artwork (optional fallback panel).
 /// </summary>
 public class LeaderboardEndScreen : MonoBehaviour
 {
     private const int TopCount = 10;
+
+    /// <summary>Reference resolution 1920×1080 — adjust if text does not line up with the painted columns.</summary>
+    private static class ArtLayout
+    {
+        public const float TableWidth = 780f;
+        public const float TableHeight = 440f;
+        public const float TableVerticalOffset = -18f;
+        public const float FirstRowY = 136f;
+        public const float RowStep = 41f;
+        public const float RankColumnX = -278f;
+        public const float NameColumnX = -15f;
+        public const float TimeColumnX = 268f;
+        public const int RowFontSize = 27;
+        public const int FooterFontSize = 25;
+        public const int CongratsFontSize = 22;
+    }
 
     public static void Show(int rankOneBased, string highlightRunId, string playerName, float elapsedSeconds)
     {
@@ -24,9 +40,9 @@ public class LeaderboardEndScreen : MonoBehaviour
 
         var font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
         var navy = new Color(0.08f, 0.12f, 0.28f, 0.96f);
-        var gold = new Color(0.92f, 0.78f, 0.28f, 1f);
-        var white = Color.white;
-        var highlightBg = new Color(0.18f, 0.28f, 0.55f, 1f);
+        var gold = new Color(0.96f, 0.88f, 0.55f, 1f);
+        var cream = new Color(0.98f, 0.96f, 0.92f, 1f);
+        var highlightTint = new Color(0.15f, 0.35f, 0.75f, 0.42f);
 
         var canvasGo = new GameObject("LeaderboardCanvas");
         canvasGo.transform.SetParent(transform, false);
@@ -40,31 +56,27 @@ public class LeaderboardEndScreen : MonoBehaviour
         scaler.matchWidthOrHeight = 0.5f;
         canvasGo.AddComponent<GraphicRaycaster>();
 
-        _ = UiRect.Image(canvasGo.transform, "Backdrop", fullStretch: true, navy);
-
-        var board = UiRect.Create(canvasGo.transform, "Board", anchorMin: new Vector2(0.5f, 0.5f), anchorMax: new Vector2(0.5f, 0.5f),
-            pivot: new Vector2(0.5f, 0.5f), size: new Vector2(920f, 780f), anchoredPos: Vector2.zero);
-        var boardImg = board.gameObject.AddComponent<Image>();
-        boardImg.color = new Color(0.06f, 0.09f, 0.22f, 1f);
-        var boardOutline = board.gameObject.AddComponent<Outline>();
-        boardOutline.effectColor = gold;
-        boardOutline.effectDistance = new Vector2(3f, -3f);
-
-        float y = 318f;
-        UiRect.Text(board, "Title", "LEADERBOARD", 40, gold, font, new Vector2(0f, y), new Vector2(860f, 52f), TextAnchor.MiddleCenter, true);
-        y -= 52f;
-        UiRect.Text(board, "Subtitle", "TOP 10", 26, gold, font, new Vector2(0f, y), new Vector2(400f, 36f), TextAnchor.MiddleCenter, true);
-        y -= 40f;
-        if (!string.IsNullOrWhiteSpace(playerName))
+        var bgSprite = Resources.Load<Sprite>("Leaderboard/LeaderboardBackground");
+        if (bgSprite != null)
         {
-            UiRect.Text(board, "Congrats", $"ESCAPED — {playerName.Trim().ToUpperInvariant()}", 20, white, font, new Vector2(0f, y), new Vector2(860f, 32f), TextAnchor.MiddleCenter, true);
-            y -= 34f;
+            UiRect.BackgroundSprite(canvasGo.transform, "LeaderboardArt", bgSprite);
+        }
+        else
+        {
+            Debug.LogWarning(
+                "LeaderboardEndScreen: Missing sprite Resources/Leaderboard/LeaderboardBackground — assign texture import to Sprite (2D and UI), or use fallback.");
+            _ = UiRect.SolidImage(canvasGo.transform, "Backdrop", fullStretch: true, navy);
         }
 
-        var headerRow = UiRect.Create(board, "HeaderRow", anchorMin: new Vector2(0.5f, 0.5f), anchorMax: new Vector2(0.5f, 0.5f),
-            pivot: new Vector2(0.5f, 0.5f), size: new Vector2(840f, 32f), anchoredPos: new Vector2(0f, y));
-        LayoutHeader(headerRow, font, gold);
-        y -= 38f;
+        var table = UiRect.Create(canvasGo.transform, "TableOverlay", anchorMin: new Vector2(0.5f, 0.5f), anchorMax: new Vector2(0.5f, 0.5f),
+            pivot: new Vector2(0.5f, 0.5f), size: new Vector2(ArtLayout.TableWidth, ArtLayout.TableHeight),
+            anchoredPos: new Vector2(0f, ArtLayout.TableVerticalOffset));
+
+        if (!string.IsNullOrWhiteSpace(playerName))
+        {
+            UiRect.Text(table, "Congrats", $"ESCAPED — {playerName.Trim().ToUpperInvariant()}", ArtLayout.CongratsFontSize, cream, font,
+                new Vector2(0f, ArtLayout.FirstRowY + 54f), new Vector2(ArtLayout.TableWidth - 40f, 34f), TextAnchor.MiddleCenter, true);
+        }
 
         List<LeaderboardStorage.LeaderboardEntryData> sorted = LeaderboardStorage.LoadAllSorted();
         int highlightRow = -1;
@@ -77,44 +89,38 @@ public class LeaderboardEndScreen : MonoBehaviour
             }
         }
 
-        float rowH = 46f;
+        float y = ArtLayout.FirstRowY;
         for (var r = 0; r < TopCount; r++)
         {
             bool isHi = r == highlightRow;
-            var rowRt = UiRect.Create(board, $"Row_{r + 1}", anchorMin: new Vector2(0.5f, 0.5f), anchorMax: new Vector2(0.5f, 0.5f),
-                pivot: new Vector2(0.5f, 0.5f), size: new Vector2(840f, rowH - 2f), anchoredPos: new Vector2(0f, y));
-            var rowBg = rowRt.gameObject.AddComponent<Image>();
-            rowBg.color = isHi ? highlightBg : new Color(0f, 0f, 0f, 0.25f);
+            var rowRt = UiRect.Create(table, $"Row_{r + 1}", anchorMin: new Vector2(0.5f, 0.5f), anchorMax: new Vector2(0.5f, 0.5f),
+                pivot: new Vector2(0.5f, 0.5f), size: new Vector2(ArtLayout.TableWidth - 24f, ArtLayout.RowStep - 1f),
+                anchoredPos: new Vector2(0f, y));
+            if (isHi)
+            {
+                var hi = rowRt.gameObject.AddComponent<Image>();
+                hi.color = highlightTint;
+                hi.raycastTarget = false;
+            }
+
             if (r < sorted.Count)
             {
                 var e = sorted[r];
-                LayoutRow(rowRt, r + 1, e.playerName, FormatTime(e.timeSeconds), font, white, gold);
+                LayoutRow(rowRt, r + 1, e.playerName, FormatTime(e.timeSeconds), font, cream, gold);
             }
             else
             {
-                LayoutRow(rowRt, r + 1, "—", "—", font, new Color(1f, 1f, 1f, 0.35f), gold);
+                LayoutRow(rowRt, r + 1, "—", "—", font, new Color(1f, 1f, 1f, 0.4f), gold);
             }
 
-            y -= rowH;
+            y -= ArtLayout.RowStep;
         }
 
-        y -= 20f;
         string yourLine = rankOneBased <= TopCount
             ? $"YOUR RANK: #{rankOneBased}   •   {FormatTime(elapsedSeconds)}"
             : $"YOUR RANK: #{rankOneBased} (outside top {TopCount})   •   {FormatTime(elapsedSeconds)}";
-        UiRect.Text(board, "YourRank", yourLine, 20, gold, font, new Vector2(0f, y), new Vector2(860f, 36f), TextAnchor.MiddleCenter, true);
-        y -= 48f;
-
-        var btnRt = UiRect.Create(board, "PlayAgain", anchorMin: new Vector2(0.5f, 0.5f), anchorMax: new Vector2(0.5f, 0.5f),
-            pivot: new Vector2(0.5f, 0.5f), size: new Vector2(280f, 48f), anchoredPos: new Vector2(0f, y));
-        var btnImg = btnRt.gameObject.AddComponent<Image>();
-        btnImg.color = new Color(0.15f, 0.22f, 0.45f, 1f);
-        var btn = btnRt.gameObject.AddComponent<Button>();
-        btn.onClick.AddListener(GameVictoryFlow.OnPlayAgainClicked);
-        var btnOutline = btnRt.gameObject.AddComponent<Outline>();
-        btnOutline.effectColor = gold;
-        btnOutline.effectDistance = new Vector2(2f, -2f);
-        UiRect.Text(btnRt, "Label", "PLAY AGAIN", 26, gold, font, Vector2.zero, new Vector2(260f, 48f), TextAnchor.MiddleCenter, false);
+        UiRect.Text(canvasGo.transform, "YourRank", yourLine, ArtLayout.FooterFontSize, gold, font,
+            new Vector2(0f, -388f), new Vector2(920f, 44f), TextAnchor.MiddleCenter, true);
     }
 
     private static string FormatTime(float seconds)
@@ -124,19 +130,15 @@ public class LeaderboardEndScreen : MonoBehaviour
         return $"{m:00}:{s:00}";
     }
 
-    private static void LayoutHeader(RectTransform parent, Font font, Color gold)
-    {
-        UiRect.Text(parent, "H_Rank", "RANK", 22, gold, font, new Vector2(-330f, 0f), new Vector2(120f, 32f), TextAnchor.MiddleCenter, false);
-        UiRect.Text(parent, "H_Name", "NAME", 22, gold, font, new Vector2(0f, 0f), new Vector2(360f, 32f), TextAnchor.MiddleCenter, false);
-        UiRect.Text(parent, "H_Time", "TIME", 22, gold, font, new Vector2(330f, 0f), new Vector2(140f, 32f), TextAnchor.MiddleCenter, false);
-    }
-
     private static void LayoutRow(RectTransform parent, int rank, string name, string time, Font font, Color textCol, Color gold)
     {
         var rankStr = rank.ToString();
-        UiRect.Text(parent, "Rank", rankStr, 20, gold, font, new Vector2(-330f, 0f), new Vector2(72f, 40f), TextAnchor.MiddleCenter, true);
-        UiRect.Text(parent, "Name", name ?? string.Empty, 20, textCol, font, new Vector2(0f, 0f), new Vector2(360f, 40f), TextAnchor.MiddleCenter, true);
-        UiRect.Text(parent, "Time", time, 20, textCol, font, new Vector2(330f, 0f), new Vector2(140f, 40f), TextAnchor.MiddleCenter, true);
+        UiRect.Text(parent, "Rank", rankStr, ArtLayout.RowFontSize, gold, font, new Vector2(ArtLayout.RankColumnX, 0f),
+            new Vector2(64f, 42f), TextAnchor.MiddleCenter, true);
+        UiRect.Text(parent, "Name", name ?? string.Empty, ArtLayout.RowFontSize, textCol, font, new Vector2(ArtLayout.NameColumnX, 0f),
+            new Vector2(360f, 42f), TextAnchor.MiddleCenter, true);
+        UiRect.Text(parent, "Time", time, ArtLayout.RowFontSize, textCol, font, new Vector2(ArtLayout.TimeColumnX, 0f),
+            new Vector2(132f, 42f), TextAnchor.MiddleCenter, true);
     }
 
     private static void EnsureEventSystem()
@@ -176,7 +178,26 @@ public class LeaderboardEndScreen : MonoBehaviour
             return rt;
         }
 
-        public static RectTransform Image(Transform parent, string name, bool fullStretch, Color color)
+        public static void BackgroundSprite(Transform parent, string name, Sprite sprite)
+        {
+            var go = new GameObject(name, typeof(RectTransform), typeof(Image));
+            go.transform.SetParent(parent, false);
+            var rt = go.GetComponent<RectTransform>();
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector2.one;
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = Vector2.zero;
+            rt.SetAsFirstSibling();
+
+            var img = go.GetComponent<Image>();
+            img.sprite = sprite;
+            img.type = Image.Type.Simple;
+            img.color = Color.white;
+            img.preserveAspect = false;
+            img.raycastTarget = false;
+        }
+
+        public static RectTransform SolidImage(Transform parent, string name, bool fullStretch, Color color)
         {
             var go = new GameObject(name, typeof(RectTransform), typeof(Image));
             go.transform.SetParent(parent, false);
@@ -191,7 +212,8 @@ public class LeaderboardEndScreen : MonoBehaviour
 
             var img = go.GetComponent<Image>();
             img.color = color;
-            img.raycastTarget = true;
+            img.raycastTarget = false;
+            rt.SetAsFirstSibling();
             return rt;
         }
 
@@ -214,8 +236,8 @@ public class LeaderboardEndScreen : MonoBehaviour
             t.horizontalOverflow = HorizontalWrapMode.Overflow;
             t.verticalOverflow = VerticalWrapMode.Overflow;
             var outline = go.AddComponent<Outline>();
-            outline.effectColor = new Color(0f, 0f, 0f, 0.65f);
-            outline.effectDistance = new Vector2(1.5f, -1.5f);
+            outline.effectColor = new Color(0f, 0f, 0f, 0.55f);
+            outline.effectDistance = new Vector2(1.2f, -1.2f);
             return t;
         }
     }
