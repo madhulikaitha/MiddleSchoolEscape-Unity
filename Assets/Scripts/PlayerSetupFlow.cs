@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class PlayerSetupFlow : MonoBehaviour
 {
     /// <summary>Square scale for player XY; bump here to resize every spawn/update path.</summary>
-    private const float PlayerWorldScale = 0.65f;
+    private const float PlayerWorldScale = 0.78f;
     private readonly List<CharacterSprites> characterSpritesList = new List<CharacterSprites>();
     private readonly List<Button> characterButtons = new List<Button>();
     private Font uiFont;
@@ -55,6 +55,7 @@ public class PlayerSetupFlow : MonoBehaviour
             return;
         }
 
+        selectedCharacterIndex = -1;
         CreateUi();
         ApplySavedSelectionToUi();
         ShowNameScreenOnly();
@@ -197,7 +198,6 @@ public class PlayerSetupFlow : MonoBehaviour
         scaler.referenceResolution = new Vector2(1920f, 1080f);
         scaler.matchWidthOrHeight = 0.5f;
         canvasGo.AddComponent<GraphicRaycaster>();
-        DontDestroyOnLoad(canvasGo);
 
         nameRoot = CreateNameScreen(canvasGo.transform);
         charRoot = CreateCharacterScreen(canvasGo.transform);
@@ -727,6 +727,7 @@ public class PlayerSetupFlow : MonoBehaviour
         }
 
         renderer.sprite = characterSprites.Front;
+        renderer.enabled = true;
         renderer.sortingOrder = 100;
 
         player.transform.localScale = new Vector3(PlayerWorldScale, PlayerWorldScale, 1f);
@@ -757,10 +758,50 @@ public class PlayerSetupFlow : MonoBehaviour
         }
 
         EnsureMovementComponent(player);
+        var movement = player.GetComponent<PlayerMovement2D>();
+        if (movement != null)
+        {
+            movement.enabled = true;
+        }
+
         EnsureAnimatorComponent(player, characterSprites);
         EnsureHealthComponent(player);
 
+        DestroyOtherPlayerTaggedObjects(player);
+
         Debug.Log($"SpawnOrUpdatePlayer: Complete! Player is at {player.transform.position}");
+    }
+
+    /// <summary>Merged scenes can leave multiple Player-tagged objects; extras keep the default white capsule sprite.</summary>
+    private static void DestroyOtherPlayerTaggedObjects(GameObject keep)
+    {
+        if (keep == null)
+        {
+            return;
+        }
+
+        foreach (var tr in Object.FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        {
+            var go = tr.gameObject;
+            if (go == keep)
+            {
+                continue;
+            }
+
+            try
+            {
+                if (!go.CompareTag("Player"))
+                {
+                    continue;
+                }
+            }
+            catch (UnityException)
+            {
+                continue;
+            }
+
+            Object.Destroy(go);
+        }
     }
 
     private static void EnsureHealthComponent(GameObject player)
@@ -786,6 +827,12 @@ public class PlayerSetupFlow : MonoBehaviour
         }
 
         animator.SetSprites(characterSprites);
+    }
+
+    /// <summary>Resolves the runtime player the same way setup/spawn does (tag, name, then movement/health heuristics).</summary>
+    public static GameObject TryResolveRuntimePlayer()
+    {
+        return FindPlayerObject();
     }
 
     private static GameObject FindPlayerObject()
@@ -891,6 +938,22 @@ public class PlayerSetupFlow : MonoBehaviour
                         SpawnOrUpdatePlayer(characterSpritesList[i]);
                         return;
                     }
+                }
+            }
+
+            // Play Again / fresh setup: session has no character yet — hide world player until name + character are confirmed.
+            if (!PlayerSessionData.IsConfigured)
+            {
+                var sr = existingPlayer.GetComponent<SpriteRenderer>();
+                if (sr != null)
+                {
+                    sr.enabled = false;
+                }
+
+                var move = existingPlayer.GetComponent<PlayerMovement2D>();
+                if (move != null)
+                {
+                    move.enabled = false;
                 }
             }
 

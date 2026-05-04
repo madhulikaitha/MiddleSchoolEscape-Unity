@@ -76,13 +76,16 @@ public static class PlayerSessionData
         OnRunTimerReset?.Invoke();
     }
 
-    // Called when you want the next scene load to show setup again with empty sprites (legacy / optional).
+    /// <summary>Full reset for Play Again — clears name/character so the next load shows name entry + character pick.</summary>
     public static void ClearForRestart()
     {
+        PlayerName = string.Empty;
+        SelectedCharacterName = string.Empty;
         SelectedSprite = null;
         SelectedCharacterSprites = null;
         IsRunActive = false;
         CurrentRunElapsedTime = 0f;
+        runHistory.Clear();
     }
 
     public static void CompleteCurrentRun()
