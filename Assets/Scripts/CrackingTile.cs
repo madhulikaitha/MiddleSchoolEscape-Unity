@@ -7,7 +7,7 @@ using UnityEngine;
 // the player gets close. After the last phase, it switches to hole mode.
 //
 // Science Lab SL tiles: set crackAnimatorStateName (e.g. explodingtilesl) to drive
-// Assets/SL-Animations clips; optional crackLeadSound / crackHitSound play in order.
+// Assets/SL-Animations clips; crackLeadSound during the crack; crackHitSound when the player falls in the hole.
 public class CrackingTile : MonoBehaviour
 {
     [Header("Detection")]
@@ -36,7 +36,7 @@ public class CrackingTile : MonoBehaviour
 
     [Header("Audio")]
     public AudioClip crackLeadSound;
-    [Tooltip("Played after crackLeadSound finishes")]
+    [Tooltip("Played when the player touches the hole after the crack (life lost)")]
     public AudioClip crackHitSound;
 
     private Animator anim;
@@ -95,7 +95,13 @@ public class CrackingTile : MonoBehaviour
 
         if (isHoleOpen)
         {
-            PlayerHealth.Instance?.TakeDamage();
+            PlayerHealth ph = PlayerHealth.Instance;
+            if (ph == null) return;
+
+            int heartsBefore = ph.CurrentHearts;
+            ph.TakeDamage();
+            if (ph.CurrentHearts < heartsBefore && audioSource != null && crackHitSound != null)
+                audioSource.PlayOneShot(crackHitSound);
             return;
         }
 
@@ -117,12 +123,6 @@ public class CrackingTile : MonoBehaviour
 
             if (audioSource != null && crackLeadSound != null)
                 audioSource.PlayOneShot(crackLeadSound);
-
-            if (crackLeadSound != null)
-                yield return new WaitForSeconds(crackLeadSound.length);
-
-            if (audioSource != null && crackHitSound != null)
-                audioSource.PlayOneShot(crackHitSound);
 
             yield return StartCoroutine(WaitForAnimatorStateComplete(crackAnimatorStateName));
         }

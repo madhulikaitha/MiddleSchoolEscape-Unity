@@ -11,12 +11,38 @@ public class PlayerHealth : MonoBehaviour, IHitHandler
     // Invoked whenever hearts change so the HUD can refresh.
     public event System.Action OnHealthChanged;
 
+    [Header("Collider vs maze")]
+    [Tooltip("Capsule relative to sprite bounds. Lower = narrower corridors; tray hits stay usable.")]
+    [SerializeField, Range(0.45f, 1f)] private float colliderVisualFitMultiplier = 0.62f;
+
+    [Tooltip("Extra shrink on width only (helps hall corners without shortening hit height).")]
+    [SerializeField, Range(0.65f, 1f)] private float horizontalColliderMultiplier = 0.78f;
+
+    [Tooltip("Capsule width/height are scaled down uniformly so the longer axis does not exceed this (world units).")]
+    [SerializeField] private float maxColliderExtent = 2f;
+
     [Header("Hit Feedback")]
     public float invincibilityDuration = 1.2f;
     public float flashInterval = 0.1f;
 
+    private static PhysicsMaterial2D sharedPlayerPhysicsMaterial;
+
     private bool isInvincible;
     private SpriteRenderer spriteRenderer;
+
+    private static PhysicsMaterial2D SharedFrictionlessMaterial()
+    {
+        if (sharedPlayerPhysicsMaterial == null)
+        {
+            sharedPlayerPhysicsMaterial = new PhysicsMaterial2D("Player_FrictionlessMaze")
+            {
+                friction = 0f,
+                bounciness = 0f
+            };
+        }
+
+        return sharedPlayerPhysicsMaterial;
+    }
 
     private void Awake()
     {
@@ -28,6 +54,44 @@ public class PlayerHealth : MonoBehaviour, IHitHandler
         Instance = this;
         CurrentHearts = MaxHearts;
         spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
+    private void Start()
+    {
+        FitCapsuleColliderToVisual();
+    }
+
+    /// <summary>Call after scale/sprite changes (e.g. <see cref="PlayerSetupFlow"/> spawn) so the capsule matches the final size — avoids an oversized collider when script order varies.</summary>
+    public void RefitColliderToSprite()
+    {
+        FitCapsuleColliderToVisual();
+    }
+
+    /// <summary>
+    /// Scene/default capsules are often tiny vs. the sprite; tray hits only registered near the center.
+    /// </summary>
+    private void FitCapsuleColliderToVisual()
+    {
+        var cap = GetComponent<CapsuleCollider2D>();
+        var sr = spriteRenderer != null ? spriteRenderer : GetComponent<SpriteRenderer>();
+        if (cap == null || sr == null || sr.sprite == null)
+            return;
+
+        Bounds worldBounds = sr.bounds;
+        Vector2 size = worldBounds.size * colliderVisualFitMultiplier;
+        size.x *= horizontalColliderMultiplier;
+
+        float major = Mathf.Max(size.x, size.y);
+        if (major > maxColliderExtent && major > 1e-4f)
+            size *= maxColliderExtent / major;
+
+        cap.size = size;
+
+        Vector3 localCenter = transform.InverseTransformPoint(worldBounds.center);
+        cap.offset = new Vector2(localCenter.x, localCenter.y);
+
+        cap.direction = size.y >= size.x ? CapsuleDirection2D.Vertical : CapsuleDirection2D.Horizontal;
+        cap.sharedMaterial = SharedFrictionlessMaterial();
     }
 
     // Called by TrayProjectile when the tray hits the player.

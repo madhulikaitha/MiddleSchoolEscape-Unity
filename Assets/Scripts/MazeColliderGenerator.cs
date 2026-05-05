@@ -20,8 +20,8 @@ public class MazeColliderGenerator : MonoBehaviour
     [Range(0f, 1f)]
     public float wallLuminanceThreshold = 0.38f;
 
-    [Tooltip("How many pixels each collision cell covers (smaller = finer colliders, more objects).")]
-    public int cellPixelSize = 8;
+    [Tooltip("How many pixels each collision cell covers (smaller = thinner walls in world units, more collider objects). Default 7 vs legacy 8 gives slightly narrower walls for the same art.")]
+    public int cellPixelSize = 6;
 
     [Tooltip("Skip this many cells from each edge when sampling (0 = full image; use 1–2 only if the art has a solid border frame).")]
     public int borderCellsToSkip = 0;

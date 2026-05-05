@@ -229,8 +229,8 @@ MonoBehaviour:
   poseThrow: {fileID: 8592237023856358619, guid: 51ec3065ea34833419a207134d3246e8, type: 3}
   trayProjectilePrefab: {fileID: 100000, guid: cc22bb334411556677889900aabb1122, type: 3}
   throwPoint: {fileID: 3001006}
-  throwCooldown: 2.8
-  windupDuration: 0.65
+  throwCooldown: 2.15
+  windupDuration: 0.5
   throwFlashDuration: 0.2
 --- !u!1 &3001005
 GameObject:
@@ -373,8 +373,8 @@ MonoBehaviour:
   poseThrow: {fileID: 545058560562818895, guid: 7a39794cfa277cf42931a93b5df91aed, type: 3}
   trayProjectilePrefab: {fileID: 100000, guid: cc22bb334411556677889900aabb1122, type: 3}
   throwPoint: {fileID: 3001016}
-  throwCooldown: 3.5
-  windupDuration: 0.65
+  throwCooldown: 2.65
+  windupDuration: 0.5
   throwFlashDuration: 0.2
 --- !u!1 &3001015
 GameObject:
@@ -2410,8 +2410,8 @@ MonoBehaviour:
   poseThrow: {fileID: 545058560562818895, guid: 7a39794cfa277cf42931a93b5df91aed, type: 3}
   trayProjectilePrefab: {fileID: 100000, guid: cc22bb334411556677889900aabb1122, type: 3}
   throwPoint: {fileID: 1892561388}
-  throwCooldown: 3.5
-  windupDuration: 0.65
+  throwCooldown: 2.65
+  windupDuration: 0.5
   throwFlashDuration: 0.2
 --- !u!212 &429039925
 SpriteRenderer:
@@ -3178,6 +3178,7 @@ GameObject:
   - component: {fileID: 673493666}
   - component: {fileID: 673493665}
   - component: {fileID: 673493669}
+  - component: {fileID: 673493670}
   m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
@@ -3305,6 +3306,23 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &673493670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 673493663}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faf076e97c6fb4d0ebfebbeaf1f7a5a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScienceLabRandomGasSpread
+  gasStateName: gasspread
+  burstDuration: 3.17
+  minPauseSeconds: 1.5
+  maxPauseSeconds: 5
+  maxInitialDelaySeconds: 4
 --- !u!1 &675876148
 GameObject:
   m_ObjectHideFlags: 0
@@ -3936,6 +3954,7 @@ GameObject:
   - component: {fileID: 811596776}
   - component: {fileID: 811596775}
   - component: {fileID: 811596774}
+  - component: {fileID: 811596777}
   m_Layer: 0
   m_Name: Gasspread-S (3)
   m_TagString: Untagged
@@ -4039,6 +4058,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &811596777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 811596773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faf076e97c6fb4d0ebfebbeaf1f7a5a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScienceLabRandomGasSpread
+  gasStateName: gasspread
+  burstDuration: 3.17
+  minPauseSeconds: 1.5
+  maxPauseSeconds: 5
+  maxInitialDelaySeconds: 4
 --- !u!1 &822569716
 GameObject:
   m_ObjectHideFlags: 0
@@ -5435,6 +5471,7 @@ GameObject:
   - component: {fileID: 954247839}
   - component: {fileID: 954247838}
   - component: {fileID: 954247837}
+  - component: {fileID: 954247840}
   m_Layer: 0
   m_Name: Gasspread-S (6)
   m_TagString: Untagged
@@ -5538,6 +5575,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &954247840
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 954247836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faf076e97c6fb4d0ebfebbeaf1f7a5a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScienceLabRandomGasSpread
+  gasStateName: gasspread
+  burstDuration: 3.17
+  minPauseSeconds: 1.5
+  maxPauseSeconds: 5
+  maxInitialDelaySeconds: 4
 --- !u!1 &962796213
 GameObject:
   m_ObjectHideFlags: 0
@@ -7805,6 +7859,7 @@ GameObject:
   - component: {fileID: 1350830902}
   - component: {fileID: 1350830901}
   - component: {fileID: 1350830900}
+  - component: {fileID: 1350830903}
   m_Layer: 0
   m_Name: Gasspread-S (1)
   m_TagString: Untagged
@@ -7908,6 +7963,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1350830903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1350830899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faf076e97c6fb4d0ebfebbeaf1f7a5a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScienceLabRandomGasSpread
+  gasStateName: gasspread
+  burstDuration: 3.17
+  minPauseSeconds: 1.5
+  maxPauseSeconds: 5
+  maxInitialDelaySeconds: 4
 --- !u!1 &1363975348
 GameObject:
   m_ObjectHideFlags: 0
@@ -9637,8 +9709,8 @@ MonoBehaviour:
   poseThrow: {fileID: 8592237023856358619, guid: 51ec3065ea34833419a207134d3246e8, type: 3}
   trayProjectilePrefab: {fileID: 100000, guid: cc22bb334411556677889900aabb1122, type: 3}
   throwPoint: {fileID: 1161529709}
-  throwCooldown: 2.8
-  windupDuration: 0.65
+  throwCooldown: 2.15
+  windupDuration: 0.5
   throwFlashDuration: 0.2
 --- !u!212 &1583698649
 SpriteRenderer:
@@ -10415,6 +10487,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1719039451}
   - component: {fileID: 1719039450}
+  - component: {fileID: 1719039452}
   m_Layer: 0
   m_Name: Maze-H
   m_TagString: Untagged
@@ -10481,6 +10554,23 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &1719039452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1719039449}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f34f7751fe3a4ce08454e7154503478, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wallMode: 0
+  wallLuminanceThreshold: 0.38
+  cellPixelSize: 6
+  borderCellsToSkip: 0
+  minWallNeighbours: 2
 --- !u!4 &1719039451
 Transform:
   m_ObjectHideFlags: 0
@@ -11183,6 +11273,7 @@ GameObject:
   - component: {fileID: 1798338443}
   - component: {fileID: 1798338442}
   - component: {fileID: 1798338441}
+  - component: {fileID: 1798338444}
   m_Layer: 0
   m_Name: Gasspread-S (4)
   m_TagString: Untagged
@@ -11286,6 +11377,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1798338444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1798338440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faf076e97c6fb4d0ebfebbeaf1f7a5a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScienceLabRandomGasSpread
+  gasStateName: gasspread
+  burstDuration: 3.17
+  minPauseSeconds: 1.5
+  maxPauseSeconds: 5
+  maxInitialDelaySeconds: 4
 --- !u!1 &1831968684
 GameObject:
   m_ObjectHideFlags: 0
@@ -12522,6 +12630,7 @@ GameObject:
   - component: {fileID: 2005550040}
   - component: {fileID: 2005550039}
   - component: {fileID: 2005550038}
+  - component: {fileID: 2005550041}
   m_Layer: 0
   m_Name: Gasspread-S
   m_TagString: Untagged
@@ -12625,6 +12734,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2005550041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2005550037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faf076e97c6fb4d0ebfebbeaf1f7a5a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScienceLabRandomGasSpread
+  gasStateName: gasspread
+  burstDuration: 3.17
+  minPauseSeconds: 1.5
+  maxPauseSeconds: 5
+  maxInitialDelaySeconds: 4
 --- !u!1 &2007533241
 GameObject:
   m_ObjectHideFlags: 0
@@ -12727,6 +12853,7 @@ GameObject:
   - component: {fileID: 2008022713}
   - component: {fileID: 2008022712}
   - component: {fileID: 2008022711}
+  - component: {fileID: 2008022714}
   m_Layer: 0
   m_Name: Gasspread-S (5)
   m_TagString: Untagged
@@ -12830,6 +12957,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2008022714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2008022710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faf076e97c6fb4d0ebfebbeaf1f7a5a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScienceLabRandomGasSpread
+  gasStateName: gasspread
+  burstDuration: 3.17
+  minPauseSeconds: 1.5
+  maxPauseSeconds: 5
+  maxInitialDelaySeconds: 4
 --- !u!1 &2015974678
 GameObject:
   m_ObjectHideFlags: 0

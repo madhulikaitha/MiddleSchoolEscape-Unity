@@ -9,7 +9,6 @@ public static class AutoPhysicsSetup2D
         try
         {
             EnsureEnvironmentColliders();
-            EnsureMazeColliders();
             EnsurePlayerPhysics();
         }
         catch (Exception ex)
@@ -21,57 +20,6 @@ public static class AutoPhysicsSetup2D
     public static void EnsurePlayerPhysicsNow()
     {
         EnsurePlayerPhysics();
-    }
-
-    private static void EnsureMazeColliders()
-    {
-        var renderers = UnityEngine.Object.FindObjectsByType<SpriteRenderer>(FindObjectsSortMode.None);
-
-        // When both exist, use Maze-H for pixel colliders so walls match that sprite (Tiles-H is often a separate/legacy floor layer).
-        bool mazeHActive = false;
-        foreach (var sr in renderers)
-        {
-            if (sr == null || sr.gameObject == null) continue;
-            if (!sr.gameObject.scene.IsValid()) continue;
-            if (!sr.gameObject.activeInHierarchy) continue;
-            if (sr.gameObject.name.Equals("Maze-H", StringComparison.OrdinalIgnoreCase))
-            {
-                mazeHActive = true;
-                break;
-            }
-        }
-
-        foreach (var sr in renderers)
-        {
-            if (sr == null || sr.gameObject == null) continue;
-            if (!sr.gameObject.scene.IsValid()) continue;
-
-            var name = sr.gameObject.name;
-            if (!IsMazeColliderTarget(name, mazeHActive)) continue;
-
-            if (sr.gameObject.GetComponent<MazeColliderGenerator>() == null)
-            {
-                sr.gameObject.AddComponent<MazeColliderGenerator>();
-                Debug.Log($"AutoPhysicsSetup2D: Attached MazeColliderGenerator to '{name}'");
-            }
-        }
-
-        if (mazeHActive)
-        {
-            Debug.Log("AutoPhysicsSetup2D: Maze colliders follow active Maze-H (Tiles-H skipped to avoid duplicate walls).");
-        }
-    }
-
-    /// <summary>
-    /// Pixel-maze colliders attach only to Maze-H or Tiles-H — not other tile layers (avoids grout-line cages).
-    /// </summary>
-    private static bool IsMazeColliderTarget(string objectName, bool mazeHActiveInScene)
-    {
-        if (objectName.Equals("Maze-H", StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (objectName.Equals("Tiles-H", StringComparison.OrdinalIgnoreCase))
-            return !mazeHActiveInScene;
-        return false;
     }
 
     private static void EnsureEnvironmentColliders()
@@ -96,6 +44,10 @@ public static class AutoPhysicsSetup2D
             // can contain the player spawn point and block movement.
             if (IsTableOrObstacle(objectName))
             {
+                // Cafeteria tables (Table-C*) — colliders are placed manually on the objects.
+                if (IsCafeteriaTableManualCollider(objectName))
+                    continue;
+
                 SetupObstacleCollider(spriteRenderer.gameObject);
             }
         }
@@ -117,6 +69,12 @@ public static class AutoPhysicsSetup2D
         }
         rb.bodyType = RigidbodyType2D.Static;
         rb.gravityScale = 0f;
+    }
+
+    /// <summary>Cafeteria tables use the Table-C prefix; skip auto BoxCollider2D so you can author colliders in-editor.</summary>
+    private static bool IsCafeteriaTableManualCollider(string objectName)
+    {
+        return objectName.StartsWith("Table-C", StringComparison.OrdinalIgnoreCase);
     }
 
     private static bool IsTableOrObstacle(string objectName)

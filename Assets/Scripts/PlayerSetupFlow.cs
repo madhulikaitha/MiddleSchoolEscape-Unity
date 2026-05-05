@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class PlayerSetupFlow : MonoBehaviour
 {
     /// <summary>Square scale for player XY; bump here to resize every spawn/update path.</summary>
-    private const float PlayerWorldScale = 0.78f;
+    private const float PlayerWorldScale = 0.86f;
     private readonly List<CharacterSprites> characterSpritesList = new List<CharacterSprites>();
     private readonly List<Button> characterButtons = new List<Button>();
     private Font uiFont;
@@ -753,7 +753,7 @@ public class PlayerSetupFlow : MonoBehaviour
         if (collider == null)
         {
             var capsule = player.AddComponent<CapsuleCollider2D>();
-            capsule.size = new Vector2(0.5f, 1f);
+            capsule.size = new Vector2(1f, 1.6f);
             Debug.Log("SpawnOrUpdatePlayer: Added CapsuleCollider2D");
         }
 
@@ -766,6 +766,10 @@ public class PlayerSetupFlow : MonoBehaviour
 
         EnsureAnimatorComponent(player, characterSprites);
         EnsureHealthComponent(player);
+
+        var health = player.GetComponent<PlayerHealth>();
+        if (health != null)
+            health.RefitColliderToSprite();
 
         DestroyOtherPlayerTaggedObjects(player);
 

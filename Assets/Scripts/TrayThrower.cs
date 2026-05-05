@@ -19,9 +19,9 @@ public class TrayThrower : MonoBehaviour
 
     [Header("Timing (seconds)")]
     [Tooltip("Total pause between throw cycles (idle time)")]
-    public float throwCooldown = 3.5f;
+    public float throwCooldown = 2.65f;
     [Tooltip("How long the windup pose is shown before the tray launches")]
-    public float windupDuration = 0.65f;
+    public float windupDuration = 0.5f;
     [Tooltip("How long the throw-flash pose is shown before returning to idle")]
     public float throwFlashDuration = 0.2f;
 

@@ -41,7 +41,8 @@ public class TrayProjectile : MonoBehaviour
         var col = GetComponent<CircleCollider2D>();
         if (col == null)
             col = gameObject.AddComponent<CircleCollider2D>();
-        col.radius = 0.3f;
+        // Generous radius so grazing hits still register (paired with player capsule fitted to sprite).
+        col.radius = 0.52f;
         col.isTrigger = true;
 
         if (spriteFlight != null)
@@ -88,10 +89,9 @@ public class TrayProjectile : MonoBehaviour
 
         hit = true;
 
-        if (other.CompareTag("Player"))
-        {
-            other.GetComponent<IHitHandler>()?.OnTrayHit();
-        }
+        var handler = other.GetComponentInParent<IHitHandler>();
+        if (handler != null)
+            handler.OnTrayHit();
 
         StartCoroutine(Splat());
     }
