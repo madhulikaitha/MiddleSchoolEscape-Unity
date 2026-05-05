@@ -193,7 +193,7 @@ public class GameHUD : MonoBehaviour
     {
         if (heartImage == null || heartSprites == null) return;
 
-        int hearts = PlayerHealth.Instance != null ? PlayerHealth.Instance.CurrentHearts : 5;
+        int hearts = PlayerHealth.Instance != null ? PlayerHealth.Instance.CurrentHearts : 4;
         hearts = Mathf.Clamp(hearts, 0, heartSprites.Length - 1);
 
         if (heartSprites[hearts] != null)

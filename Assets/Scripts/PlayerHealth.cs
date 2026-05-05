@@ -1,11 +1,13 @@
 using System.Collections;
+using MiddleSchoolEscape;
 using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour, IHitHandler
 {
     public static PlayerHealth Instance { get; private set; }
 
-    public int MaxHearts = 5;
+    [Tooltip("Lower = tighter runs; leaderboard stays time-based.")]
+    public int MaxHearts = 4;
     public int CurrentHearts { get; private set; }
 
     // Invoked whenever hearts change so the HUD can refresh.
@@ -22,8 +24,9 @@ public class PlayerHealth : MonoBehaviour, IHitHandler
     [SerializeField] private float maxColliderExtent = 2f;
 
     [Header("Hit Feedback")]
-    public float invincibilityDuration = 1.2f;
-    public float flashInterval = 0.1f;
+    [Tooltip("Shorter windows mean hazards and trays can tag you again sooner.")]
+    public float invincibilityDuration = 0.78f;
+    public float flashInterval = 0.09f;
 
     private static PhysicsMaterial2D sharedPlayerPhysicsMaterial;
 
@@ -59,6 +62,13 @@ public class PlayerHealth : MonoBehaviour, IHitHandler
     private void Start()
     {
         FitCapsuleColliderToVisual();
+        ApplyCharacterUnderHazardSortOrder();
+    }
+
+    private void ApplyCharacterUnderHazardSortOrder()
+    {
+        foreach (var sr in GetComponentsInChildren<SpriteRenderer>(true))
+            sr.sortingOrder = HazardVisualSortOrders.Player;
     }
 
     /// <summary>Call after scale/sprite changes (e.g. <see cref="PlayerSetupFlow"/> spawn) so the capsule matches the final size — avoids an oversized collider when script order varies.</summary>
@@ -95,7 +105,16 @@ public class PlayerHealth : MonoBehaviour, IHitHandler
     }
 
     // Called by TrayProjectile when the tray hits the player.
-    public void OnTrayHit() => TakeDamage();
+    public void OnTrayHit()
+    {
+        int before = CurrentHearts;
+        TakeDamage();
+        if (CurrentHearts >= before)
+            return;
+        var narr = NarrativeDialogueController.Instance;
+        if (narr != null && narr.GetCurrentZone() == NarrativeDialogueController.NarrativeZone.Cafeteria)
+            narr.NotifyPlayerDamaged(NarrativeDialogueController.NarrativeZone.Cafeteria);
+    }
 
     // Call this from any future mistake source.
     public void TakeDamage()

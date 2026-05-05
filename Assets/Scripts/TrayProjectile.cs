@@ -1,4 +1,5 @@
 using System.Collections;
+using MiddleSchoolEscape;
 using UnityEngine;
 
 public class TrayProjectile : MonoBehaviour
@@ -8,7 +9,7 @@ public class TrayProjectile : MonoBehaviour
     public Sprite spriteSplat;
 
     [Header("Movement")]
-    public float speed = 18f;
+    public float speed = 35f;
     public float lifetime = 8f;
     public float spinSpeed = 540f;
 
@@ -42,11 +43,13 @@ public class TrayProjectile : MonoBehaviour
         if (col == null)
             col = gameObject.AddComponent<CircleCollider2D>();
         // Generous radius so grazing hits still register (paired with player capsule fitted to sprite).
-        col.radius = 0.52f;
+        col.radius = 0.58f;
         col.isTrigger = true;
 
         if (spriteFlight != null)
             spriteRenderer.sprite = spriteFlight;
+
+        spriteRenderer.sortingOrder = HazardVisualSortOrders.FlyingTray;
 
         Destroy(gameObject, lifetime);
     }
@@ -73,7 +76,7 @@ public class TrayProjectile : MonoBehaviour
     {
         var col = GetComponent<CircleCollider2D>();
         if (col != null) col.enabled = false;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.14f);
         if (col != null) col.enabled = true;
     }
 
@@ -91,7 +94,11 @@ public class TrayProjectile : MonoBehaviour
 
         var handler = other.GetComponentInParent<IHitHandler>();
         if (handler != null)
+        {
             handler.OnTrayHit();
+            if (handler is PlayerHealth)
+                GameplaySfx.PlayTrayHitAt(other.bounds.center);
+        }
 
         StartCoroutine(Splat());
     }

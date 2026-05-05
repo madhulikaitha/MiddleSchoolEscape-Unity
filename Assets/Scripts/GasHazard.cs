@@ -18,7 +18,7 @@ public class GasHazard : MonoBehaviour
     [Tooltip("Seconds for the cloud to grow from nothing to full size")]
     public float growDuration = 1.5f;
     [Tooltip("Seconds the gas cloud stays at full size and deals damage")]
-    public float gasDuration = 4f;
+    public float gasDuration = 5.25f;
     [Tooltip("Seconds for the cloud to shrink back down")]
     public float shrinkDuration = 1f;
 
@@ -26,7 +26,7 @@ public class GasHazard : MonoBehaviour
     [Tooltip("How close the player must be to trigger the flask")]
     public float detectionRadius = 3f;
     [Tooltip("Radius used for damage overlap check while gas is active")]
-    public float gasRadius = 1.8f;
+    public float gasRadius = 2.05f;
 
     [Header("References (auto-found if empty)")]
     public SpriteRenderer gasCloudRenderer;
@@ -41,6 +41,13 @@ public class GasHazard : MonoBehaviour
 
     private void Awake()
     {
+        if (GetComponent<ScienceLabRandomGasSpread>() != null ||
+            GetComponentInChildren<ScienceLabRandomGasSpread>(true) != null)
+        {
+            enabled = false;
+            return;
+        }
+
         flaskAnimator = GetComponent<Animator>();
         if (flaskAnimator != null)
             flaskAnimator.speed = 0f;
@@ -79,13 +86,16 @@ public class GasHazard : MonoBehaviour
     {
         if (state != GasState.Active) return;
 
-        var hits = Physics2D.OverlapCircleNonAlloc(transform.position, gasRadius, _overlapBuffer);
+        int hits = Physics2D.OverlapCircle(transform.position, gasRadius, ContactFilter2D.noFilter, _overlapBuffer);
         for (int i = 0; i < hits; i++)
-            if (_overlapBuffer[i].CompareTag("Player"))
+        {
+            Collider2D col = _overlapBuffer[i];
+            if (col != null && col.CompareTag("Player"))
                 PlayerHealth.Instance?.TakeDamage();
+        }
     }
 
-    private readonly Collider2D[] _overlapBuffer = new Collider2D[4];
+    private readonly Collider2D[] _overlapBuffer = new Collider2D[8];
 
     private IEnumerator GasSequence()
     {

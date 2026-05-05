@@ -10,13 +10,13 @@ public class FireHazard : MonoBehaviour
 {
     [Header("Detection")]
     [Tooltip("How close the player must get to ignite the fire")]
-    public float detectionRadius = 2.5f;
+    public float detectionRadius = 2.95f;
     [Tooltip("Radius of the actual fire hazard — player inside this loses a life")]
-    public float fireRadius = 0.8f;
+    public float fireRadius = 1f;
 
     [Header("Timing")]
     [Tooltip("Brief delay after igniting before damage kicks in")]
-    public float igniteDelay = 0.5f;
+    public float igniteDelay = 0.35f;
 
     private Animator anim;
     private SpriteRenderer sr;

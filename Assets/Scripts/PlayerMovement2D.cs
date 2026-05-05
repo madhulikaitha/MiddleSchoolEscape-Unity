@@ -3,13 +3,14 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement2D : MonoBehaviour
 {
-    public float moveSpeed = 8f;
-    public float acceleration = 20f;
-    public float deceleration = 28f;
+    public float moveSpeed = 6.85f;
+    public float acceleration = 17f;
+    public float deceleration = 24f;
 
     private Rigidbody2D rb;
     private Vector2 moveInput;
     private Vector2 smoothVelocityRef;
+    private bool _notifiedFirstMovement;
 
     private void Awake()
     {
@@ -40,23 +41,54 @@ public class PlayerMovement2D : MonoBehaviour
             moveInput.Normalize();
         }
 
+        if (!_notifiedFirstMovement && moveInput.sqrMagnitude > 0.02f)
+        {
+            _notifiedFirstMovement = true;
+            NarrativeDialogueController.Instance?.NotifyFirstMovement();
+        }
     }
 
     private static Vector2 ReadMoveInput()
     {
-        float x = Input.GetAxisRaw("Horizontal");
-        float y = Input.GetAxisRaw("Vertical");
+        Vector2 v = Vector2.zero;
 
-        var keyboard = Keyboard.current;
-        if (keyboard != null)
+        var gp = Gamepad.current;
+        if (gp != null)
         {
-            if (keyboard.dKey.isPressed || keyboard.rightArrowKey.isPressed) x = 1f;
-            if (keyboard.aKey.isPressed || keyboard.leftArrowKey.isPressed) x = -1f;
-            if (keyboard.wKey.isPressed || keyboard.upArrowKey.isPressed) y = 1f;
-            if (keyboard.sKey.isPressed || keyboard.downArrowKey.isPressed) y = -1f;
+            v = gp.leftStick.ReadValue();
+            const float dz = 0.22f;
+            if (v.magnitude >= dz)
+            {
+                float mag = Mathf.Min(1f, (v.magnitude - dz) / (1f - dz));
+                v = v.normalized * mag;
+            }
+            else
+            {
+                v = Vector2.zero;
+                Vector2 dpad = gp.dpad.ReadValue();
+                if (dpad.sqrMagnitude > 0.01f)
+                    v = new Vector2(Mathf.Clamp(dpad.x, -1f, 1f), Mathf.Clamp(dpad.y, -1f, 1f));
+            }
         }
 
-        return new Vector2(x, y);
+        if (v.sqrMagnitude < 0.01f)
+        {
+            float x = Input.GetAxisRaw("Horizontal");
+            float y = Input.GetAxisRaw("Vertical");
+
+            var keyboard = Keyboard.current;
+            if (keyboard != null)
+            {
+                if (keyboard.dKey.isPressed || keyboard.rightArrowKey.isPressed) x = 1f;
+                if (keyboard.aKey.isPressed || keyboard.leftArrowKey.isPressed) x = -1f;
+                if (keyboard.wKey.isPressed || keyboard.upArrowKey.isPressed) y = 1f;
+                if (keyboard.sKey.isPressed || keyboard.downArrowKey.isPressed) y = -1f;
+            }
+
+            v = new Vector2(x, y);
+        }
+
+        return v;
     }
 
     private void FixedUpdate()

@@ -156,7 +156,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.52
+  m_Radius: 0.58
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171,6 +171,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spriteFlight: {fileID: -3907636636617929900, guid: 1d06ec7b45a04444a8188efb2a23432b, type: 3}
   spriteSplat: {fileID: -2796139156986697027, guid: 1d06ec7b45a04444a8188efb2a23432b, type: 3}
-  speed: 30
+  speed: 35
   lifetime: 8
   splatDuration: 0.5

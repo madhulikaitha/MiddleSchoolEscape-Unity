@@ -10,15 +10,19 @@ using UnityEngine;
 // Assets/SL-Animations clips; crackLeadSound during the crack; crackHitSound when the player falls in the hole.
 public class CrackingTile : MonoBehaviour
 {
-    [Header("Detection")]
-    [Tooltip("How close the player must get to trigger the crack animation")]
-    public float detectionRadius = 2f;
-    [Tooltip("Radius of the open hole that damages the player after animation completes")]
-    public float holeRadius = 0.6f;
+    [Header("Detection (precise footprint)")]
+    [Tooltip("Scales SpriteRenderer.sprite.bounds for the crack trigger (1 = match tile sprite).")]
+    public Vector2 crackTriggerSizeMultiplier = Vector2.one;
+
+    [Tooltip("Box size (local units) for damage after the hole opens — keep tight to walkable pit.")]
+    public Vector2 holeTriggerSize = new Vector2(0.52f, 0.52f);
+
+    [Tooltip("Offset from transform center when hole BoxCollider applies")]
+    public Vector2 holeTriggerOffset = Vector2.zero;
 
     [Header("Timing")]
     [Tooltip("Total seconds for all cracking phases before hole opens")]
-    public float crackAnimDuration = 1.1f;
+    public float crackAnimDuration = 0.92f;
 
     [Header("Phase Visuals")]
     [Tooltip("6 exploding phases in order (phase 1 -> phase 6)")]
@@ -42,9 +46,10 @@ public class CrackingTile : MonoBehaviour
     private Animator anim;
     private SpriteRenderer sr;
     private AudioSource audioSource;
-    private CircleCollider2D zoneTrigger;
+    private BoxCollider2D zoneTrigger;
     private bool hasCracked;
     private bool isHoleOpen;
+    private bool sequenceRunning;
 
     private bool UsesAnimatorCrack => anim != null && !string.IsNullOrEmpty(crackAnimatorStateName);
 
@@ -81,9 +86,65 @@ public class CrackingTile : MonoBehaviour
         if (holeTileObject != null)
             holeTileObject.SetActive(false);
 
-        zoneTrigger = gameObject.AddComponent<CircleCollider2D>();
-        zoneTrigger.radius = detectionRadius;
-        zoneTrigger.isTrigger = true;
+        foreach (var leg in GetComponents<CircleCollider2D>())
+        {
+            if (leg.isTrigger)
+                Destroy(leg);
+        }
+
+        zoneTrigger = FindTriggerBoxOrCreate();
+        RefreshCrackTriggerFootprint();
+    }
+
+    private void OnValidate()
+    {
+        if (anim == null) anim = GetComponent<Animator>();
+        if (sr == null) sr = GetComponent<SpriteRenderer>();
+        zoneTrigger ??= FindTriggerBoxOn(gameObject);
+        if (zoneTrigger != null && !isHoleOpen)
+            RefreshCrackTriggerFootprint();
+    }
+
+    private static BoxCollider2D FindTriggerBoxOn(GameObject go)
+    {
+        foreach (var b in go.GetComponents<BoxCollider2D>())
+        {
+            if (b.isTrigger)
+                return b;
+        }
+
+        return null;
+    }
+
+    private BoxCollider2D FindTriggerBoxOrCreate()
+    {
+        BoxCollider2D found = FindTriggerBoxOn(gameObject);
+        if (found != null)
+            return found;
+
+        var box = gameObject.AddComponent<BoxCollider2D>();
+        box.isTrigger = true;
+        return box;
+    }
+
+    private void RefreshCrackTriggerFootprint()
+    {
+        if (zoneTrigger == null)
+            return;
+
+        if (sr != null && sr.sprite != null)
+        {
+            Bounds b = sr.sprite.bounds;
+            zoneTrigger.size = new Vector2(
+                b.size.x * crackTriggerSizeMultiplier.x,
+                b.size.y * crackTriggerSizeMultiplier.y);
+            zoneTrigger.offset = new Vector2(b.center.x, b.center.y);
+        }
+        else
+        {
+            zoneTrigger.size = new Vector2(1f, 1f);
+            zoneTrigger.offset = Vector2.zero;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other) => HandleContact(other);
@@ -95,13 +156,13 @@ public class CrackingTile : MonoBehaviour
 
         if (isHoleOpen)
         {
-            PlayerHealth ph = PlayerHealth.Instance;
-            if (ph == null) return;
+            DamagePlayerStandingOnTile();
+            return;
+        }
 
-            int heartsBefore = ph.CurrentHearts;
-            ph.TakeDamage();
-            if (ph.CurrentHearts < heartsBefore && audioSource != null && crackHitSound != null)
-                audioSource.PlayOneShot(crackHitSound);
+        if (sequenceRunning)
+        {
+            DamagePlayerStandingOnTile();
             return;
         }
 
@@ -109,9 +170,26 @@ public class CrackingTile : MonoBehaviour
             StartCoroutine(CrackSequence());
     }
 
+    private void DamagePlayerStandingOnTile()
+    {
+        PlayerHealth ph = PlayerHealth.Instance;
+        if (ph == null) return;
+
+        int heartsBefore = ph.CurrentHearts;
+        ph.TakeDamage();
+        if (ph.CurrentHearts >= heartsBefore)
+            return;
+
+        NarrativeDialogueController.Instance?.NotifyHoleDamagedPlayer();
+        if (audioSource != null && crackHitSound != null)
+            audioSource.PlayOneShot(crackHitSound);
+    }
+
     private IEnumerator CrackSequence()
     {
         hasCracked = true;
+        sequenceRunning = true;
+        NarrativeDialogueController.Instance?.NotifyFirstCrackingTileExplosion();
 
         bool usesPhaseSprites = !UsesAnimatorCrack && phaseSprites != null && phaseSprites.Length > 1 && sr != null;
 
@@ -161,9 +239,12 @@ public class CrackingTile : MonoBehaviour
                 sr.enabled = false;
         }
 
-        // Shrink trigger to the hole size for the damage zone
-        zoneTrigger.radius = holeRadius;
+        zoneTrigger.size = new Vector2(
+            Mathf.Max(0.02f, holeTriggerSize.x),
+            Mathf.Max(0.02f, holeTriggerSize.y));
+        zoneTrigger.offset = holeTriggerOffset;
         isHoleOpen = true;
+        sequenceRunning = false;
     }
 
     private IEnumerator WaitForAnimatorStateComplete(string stateName)

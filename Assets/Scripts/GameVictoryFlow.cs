@@ -7,6 +7,12 @@ public static class GameVictoryFlow
 {
     private static bool sequenceActive;
 
+    /// <summary>Lets the player run the victory sequence again after Play Again reloads the scene.</summary>
+    public static void ResetSequenceLock()
+    {
+        sequenceActive = false;
+    }
+
     public static void RunVictorySequence(GameObject playerObject)
     {
         if (sequenceActive)
@@ -34,6 +40,8 @@ public static class GameVictoryFlow
         {
             hud.gameObject.SetActive(false);
         }
+
+        NarrativeDialogueController.Instance?.NotifyVictoryExit();
 
         LeaderboardEndScreen.Show(rank, runId, last.PlayerName, last.ElapsedTimeSeconds);
     }

@@ -19,9 +19,9 @@ public class TrayThrower : MonoBehaviour
 
     [Header("Timing (seconds)")]
     [Tooltip("Total pause between throw cycles (idle time)")]
-    public float throwCooldown = 2.65f;
+    public float throwCooldown = 1.72f;
     [Tooltip("How long the windup pose is shown before the tray launches")]
-    public float windupDuration = 0.5f;
+    public float windupDuration = 0.38f;
     [Tooltip("How long the throw-flash pose is shown before returning to idle")]
     public float throwFlashDuration = 0.2f;
 
@@ -115,7 +115,10 @@ public class TrayThrower : MonoBehaviour
     {
         if (trayProjectilePrefab == null) return;
 
-        var origin = throwPoint != null ? throwPoint.position : transform.position;
+        NarrativeDialogueController.Instance?.NotifyFirstTrayThrown();
+
+        Vector3 origin = throwPoint != null ? throwPoint.position : transform.position;
+        GameplaySfx.PlayTableThrowAt(origin);
         var tray = Instantiate(trayProjectilePrefab, origin, Quaternion.identity);
 
         // Aim at player's position the moment the throw happens (not tracking)
